@@ -12,6 +12,25 @@ start_new = False # Изначально обучение отключено. О
 def cls():
     system('CLS')
 
+def fun_err():
+    cls()
+    print('\nПРОГРАММА: Папки System не существует.\nПожалуйста, создайте её, и тогда у меня как у программы\nПоявится возможность создать файлы в ней. :з')
+    fun_error = input('\nENTER - хорошо, так и сделаю\n1 - Какого хрена?!\nВАШ ОТВЕТ: ==> ')
+    if fun_error == "":
+        exit()
+    elif fun_error == "1":
+        print(
+            'ПРОГРАММА: К сожалению, мой разработчик поленился сделать мне такую функцию.\nТак что вам самим придётся это делать :(')
+        input('\nНАЖМИТЕ ENTER для выхода.')
+        slp(1)
+        print('ВЫ: Ну и хрен с вами!')
+        slp(3)
+        exit()
+    else:
+        print('ПРОГРАММА: Раз вы написали всякую ахинею, я вынуждена отключиться...')
+        slp(4)
+        exit()
+
 # Основной класс персонажа игрока
 class Person:
     # Основной класс оружия игрока
@@ -36,9 +55,12 @@ try:
 except FileNotFoundError:
     print('Файла save.txt не существует. Создание нового сохранения...')
     slp(1)
-    save = open('System/save.txt', 'w')
-    save.write('0')
-    save.close()
+    try:
+        save = open('System/save.txt', 'w')
+        save.write('0')
+        save.close()
+    except FileNotFoundError:
+        fun_err()
 
 # Проверка на наличие файла "pack.txt" в папке System
 try:
@@ -46,9 +68,12 @@ try:
 except FileNotFoundError:
     print('Файла pack.txt не существует. Создание нового файла...')
     slp(1)
-    pack = open('System/pack.txt', 'w')
-    pack.write('0000')
-    pack.close()
+    try:
+        pack = open('System/pack.txt', 'w')
+        pack.write('0000')
+        pack.close()
+    except FileNotFoundError:
+        fun_err()
 
 # Проверка на наличие файла "name.txt" в папке System
 try:
@@ -56,9 +81,12 @@ try:
 except FileNotFoundError:
     print('Файла name.txt не существует. Создание нового файла...')
     slp(1)
-    name = open('System/name.txt', 'w')
-    name.write('Герой')
-    name.close()
+    try:
+        name = open('System/name.txt', 'w')
+        name.write('Герой')
+        name.close()
+    except FileNotFoundError:
+        fun_err()
 
 # ВНИМАНИЕ! При проверке и одновременно чтение файла, чтение сдвигается!
 save = open('System/save.txt', 'r')
@@ -70,9 +98,12 @@ if save.read(1) != '0': # Суть данного if-а: Если сохране
     if save.read(1) != '1':
         print('Файл save.txt Был необратимо изменен. Создание нового сохранения...')
         slp(1.2)
-        save = open('System/save.txt', 'w')
-        save.write('0')
-        save.close()
+        try:
+            save = open('System/save.txt', 'w')
+            save.write('0')
+            save.close()
+        except FileNotFoundError:
+            fun_err()
 
 # Открытие файла save.txt
 save = open('System/save.txt', 'r')
