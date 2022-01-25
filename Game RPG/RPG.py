@@ -1,7 +1,15 @@
 import random as rdm
 from time import sleep as slp
 from os import system # для быстрой очистки экрана
-import dunges as d # файл dunges.py
+
+
+try:
+    import dunges as d # файл dunges.py
+except ModuleNotFoundError:
+    print('ОШИБКА! НЕ НАЙДЕН ФАЙЛ "dunges.py"')
+    slp(99999)
+
+
 from colorama import init
 from colorama import Fore, Back, Style
 init()
@@ -26,7 +34,7 @@ def fun_err():
         slp(3)
         exit()
     else:
-        print('\nПРОГРАММА: Раз вы написали всякую ахинею, я вынуждена отключиться...')
+        print('\nПРОГРАММА: Раз вы написали всякую ахинею, я отключаюсь...')
         slp(4)
         exit()
 
