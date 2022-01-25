@@ -2,13 +2,12 @@ import random as rdm
 from time import sleep as slp
 from os import system # для быстрой очистки экрана
 
-
+# Проверка наличия dunges.py
 try:
     import dunges as d # файл dunges.py
 except ModuleNotFoundError:
     print('ОШИБКА! НЕ НАЙДЕН ФАЙЛ "dunges.py"')
     slp(99999)
-
 
 from colorama import init
 from colorama import Fore, Back, Style
@@ -53,6 +52,12 @@ class Person:
     coins = 500
     crystals = 1
     day = 0
+    # Зелья
+    potion_pow = 0
+    potion_heal = 0
+    potion_mana = 0
+    # Сундуки
+    pack_chest = 0
 
 # Проверка целостности файлов
 
@@ -122,7 +127,7 @@ if save.read(1) == '0':
     text_name = open('System/name.txt', 'w')
     text_name.write(Person.name)
     print('\nВаше новое имя:',Person.name)
-    print('Чтобы его изменить, пройдите по пути:\n "Корневая папка/System/name.txt"\nИ прописывайте новое, оригинальное на ваш взгляд имя :)\n\nВНИМАНИЕ! Настоятельно не рекомендуем удалять файл name.txt\n')
+    print('\nЧтобы его изменить, пройдите по пути:\n "Корневая папка/System/name.txt"\nИ прописывайте новое, оригинальное на ваш взгляд имя :)\n\nВНИМАНИЕ! Настоятельно не рекомендуем удалять файл name.txt\n')
     slp(5)
     text_name.close()
     # Выбор класса перса
@@ -180,7 +185,7 @@ if save.read(1) == '0':
 def menu():
     cls()
     if start_new == True:
-        print("Если возникнут вопросы, пиши в меню хелп/help")
+        print("Если возникнут вопросы, пиши в меню: хелп/help\n")
 
     print(Back.GREEN, Fore.BLACK)
     print('=========OFFLINE RPG========')
@@ -223,7 +228,14 @@ def menu():
         print('============================')
         print(Back.CYAN, '    ВАШ ИНВЕНТАРЬ:')
         print(Back.MAGENTA, Fore.WHITE)
-        # Недоделал инвентарь
+        print('Монет:', Person.coins)
+        print('Кристаллов: ', Person.crystals)
+        print('Зелье силы:', Person.potion_pow)
+        print('Зелье здоровья:', Person.potion_heal)
+        if Person.special == "Маг":
+            print('Зелье маны:', Person.potion_mana)
+        print('Сундуков:',Person.pack_chest)
+        print(Back.GREEN, Fore.BLACK)
         print('============================\n')
         print(Fore.BLACK, Back.WHITE)
         choose = input('НАЖМИТЕ ENTER ЧТОБЫ ВЫЙТИ В МЕНЮ')
@@ -251,24 +263,24 @@ save.seek(0) # Сброс на начало файла
 # xp
 for i in range(2):
     save.readline()
-Person.xp = save.readline()
+Person.xp = int(save.readline())
 save.seek(0)
 # coins
 for i in range(3):
     save.readline()
-Person.Weapon.level = save.readline()
+Person.Weapon.level = int(save.readline())
 save.seek(0)
 # crystals
 for i in range(5):
     save.readline()
-Person.crystals = save.readline()
+Person.crystals = int(save.readline())
 save.seek(0)
 ###########
 # Загрузка дней, проведённых за игрой
 ###########
 for i in range(6):
     save.readline()
-Person.day = save.readline()
+Person.day = int(save.readline())
 save.seek(0)
 ###########
 # Загрузка названия оружия
@@ -278,6 +290,26 @@ for i in range(7):
 Person.Weapon.name = save.readline()
 ###########
 save.close() # Закрытие сохранения
+
+# Загрузка инвентаря
+save_inventory = open('System/pack.txt', 'r')
+###########
+# Загрузка зелья силы
+save_inventory.seek(0)
+Person.potion_pow = save_inventory.read(1)
+###########
+# Загрузка зелья здоровья
+save_inventory.seek(1)
+Person.potion_heal = save_inventory.read(1)
+###########
+# Загрузка зелья маны
+save_inventory.seek(2)
+Person.potion_mana = save_inventory.read(1)
+###########
+# Загрузка сундуков
+save_inventory.seek(3)
+Person.pack_chest = save_inventory.read(1)
+###########
 
 # Загрузка имени
 text_name = open('System/name.txt', 'r')
