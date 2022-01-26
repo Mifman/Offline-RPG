@@ -216,7 +216,7 @@ def menu():
     print(Back.BLACK, Fore.WHITE)
     cls()
     if start_new == True:
-        print("Если возникнут вопросы, пиши в меню: хелп/help\n")
+        print("Если возникнут вопросы, пиши в меню: 6\n")
     print(Back.GREEN, Fore.BLACK)
     print('=========OFFLINE RPG========')
     print(Back.CYAN, '    ПЕРСОНАЖ:', Person.name)
