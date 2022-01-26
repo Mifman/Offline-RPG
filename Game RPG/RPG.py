@@ -18,6 +18,7 @@ start_new = False # Изначально обучение отключено. О
 # Быстрая очистка экрана
 def cls():
     system('CLS')
+    print(Fore.WHITE, Back.BLACK)
 
 def fun_err():
     cls()
@@ -50,6 +51,7 @@ class Person:
     name = None
     special = None
     xp = 0
+    day = 0  # Дни, проведённые за игрой (игровые, вычисляются битвами)
     coins = 500
     crystals = 1
     # Зелья
@@ -58,14 +60,12 @@ class Person:
     potion_mana = 0
     # Сундуки
     pack_chest = 0
+    # Класс статистики (цифра 5 в меню)
+    class Stats():
+        coins_up = 0  # Всего заработано монет
+        crystals_up = 0  # Всего заработано кристаллов
+        chests_open = 0  # Всего открытых сундуков
 
-# Класс статистики (цифра 5 в меню)
-class Stats():
-    xp = Person.xp # Опыт игрока
-    coins_up = 0 # Всего заработано монет
-    crystals_up = 0 # Всего заработано кристаллов
-    day = 0 # Дни, проведённые за игрой (игровые, вычисляются битвами)
-    chests_open = 0 # Всего открытых сундуков
 
 
 
@@ -82,12 +82,12 @@ class Market:
     stall_4 = rdm.choice(l_market)
     # Переменная, позволяющая изменить генерацию ларьков (True - может/False - не может). По умолчанию False
     edit = False
-    # Цена
-    price_0 = rdm.randint(3,30)
+    # Цена товара на рынке
+    price_0 = rdm.randint(3,50)
     price_1 = rdm.randint(3,30)
-    price_2 = rdm.randint(3,30)
-    price_3 = rdm.randint(3,30)
-    price_4 = rdm.randint(3,30)
+    price_2 = rdm.randint(3,45)
+    price_3 = rdm.randint(5,30)
+    price_4 = rdm.randint(3,35)
 
 # Проверка целостности файлов
 
@@ -328,10 +328,108 @@ def market():
     print('5.',Market.stall_4,'за',Market.price_4,'монет\n')
     print(Back.GREEN, Fore.BLACK, '============================')
 
+
+    # Работа рынка
+    ####################
+    def potion_more():
+        print(Back.RED, Fore.WHITE, '\nВы не можете хранить больше 9-ти зелий/сундуков одного вида!')
+        slp(3)
+        market()
+
+    # Пересохраение основного "save.txt"
+    def m_write_save():
+        save = open('System/save.txt', 'w')
+        save.write('1\n{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n{6}'.format(Person.special,Person.xp,Person.Weapon.level,Person.coins,Person.crystals,Person.day,Person.Weapon.name))
+        save.close()
+
+    # Пересохраение инвентаря игрока (pack.txt)
+    def m_write_pack():
+        save_inventory = open('System/pack.txt', 'w')
+        save_inventory.seek(0)
+        save_inventory.write('{0}{1}{2}{3}'.format(Person.potion_pow, Person.potion_heal, Person.potion_mana, Person.pack_chest))
+        save_inventory.close()
+
+    def m_buy(): # l_market = ["Зелье Силы", "Зелье Здоровья", "Зелье маны", "Сундук", "Кристаллы"]
+        cls()
+        if market_choose == 'Зелье Силы':
+            print(Back.GREEN, Fore.BLACK, '\nПокупка совершена!')
+            print(Back.BLACK, Fore.WHITE)
+            slp(0.8)
+            Person.potion_pow += 1
+            m_write_pack()
+            menu()
+
+        elif market_choose == 'Зелье Здоровья':
+            print(Back.GREEN, Fore.BLACK, '\nПокупка совершена!')
+            print(Back.BLACK, Fore.WHITE)
+            slp(0.8)
+            Person.potion_heal += 1
+            m_write_pack()
+            menu()
+
+        elif market_choose == 'Зелье маны':
+            if Person.special != "Маг":
+                print(Person.special,'не может покупать зелье маны!')
+                print(Back.BLACK, Fore.WHITE)
+                slp(3)
+                market()
+
+            else:
+                print(Back.GREEN, Fore.BLACK, '\nПокупка совершена!')
+                print(Back.BLACK, Fore.WHITE)
+                slp(0.8)
+                Person.potion_mana += 1
+                m_write_pack()
+                menu()
+
+        elif market_choose == 'Сундук':
+            print(Back.GREEN, Fore.BLACK, '\nПокупка совершена!')
+            print(Back.BLACK, Fore.WHITE)
+            slp(0.8)
+            Person.pack_chest += 1
+            m_write_pack()
+            menu()
+
+        elif market_choose == 'Кристаллы':
+            print(Back.GREEN, Fore.BLACK, '\nПокупка совершена!')
+            print(Back.BLACK,Fore.WHITE)
+            slp(0.8)
+            Person.crystals += 1
+            m_write_save()
+            menu()
+
+    ####################
+
+
     # Недоделал
+    # Варианты выбора
     market_choose = input('\nВаш выбор (exit/ENTER - выход из рынка): ==>')
     if market_choose == "exit" or market_choose == "":
         menu()
+    elif market_choose == '1':
+        market_choose = Market.stall_0
+        if market_choose != 'Кристаллы':
+            save_inventory = open('System/pack.txt', 'r')
+            save_inventory.seek(0)
+
+            if Person.coins >= Market.price_0:
+                if int(save_inventory.read(1)) > 9:
+                    save_inventory.close()
+                    potion_more()
+                else:
+                    Person.coins -= Market.price_0
+                    m_buy()
+            else:
+                print('Для покупки не хватает',(Market.price_0 - Person.coins),'монет!')
+
+        else:
+            if Person.coins >= Market.price_0:
+                Person.coins -= Market.price_0
+                m_buy()
+            else:
+                print('Для покупки не хватает',(Market.price_0 - Person.coins),'монет!')
+
+
 
 
 # Недоделал
