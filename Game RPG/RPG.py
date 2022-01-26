@@ -6,7 +6,7 @@ from os import system # для быстрой очистки экрана
 try:
     import dunges as d # файл dunges.py
 except ModuleNotFoundError:
-    print('ОШИБКА! НЕ НАЙДЕН ФАЙЛ "dunges.py"')
+    print('ОШИБКА! В КОРНЕВОМ КАТАЛОГЕ НЕ НАЙДЕН ФАЙЛ "dunges.py"')
     slp(99999)
 
 from colorama import init
@@ -21,7 +21,7 @@ def cls():
 
 def fun_err():
     cls()
-    print('\nПРОГРАММА: Папки System не существует.\nПожалуйста, создайте её, и тогда у меня как у программы\nПоявится возможность создать файлы в ней. :з')
+    print('\nПРОГРАММА: Папки "System" в корневом каталоге не существует.\nПожалуйста, создайте её, и тогда у меня как у программы\nПоявится возможность создать файлы в ней. :з')
     fun_error = input('\nENTER - хорошо, так и сделаю\n1 - Какого хрена?!\nВАШ ОТВЕТ: ==> ')
     if fun_error == "":
         exit()
@@ -44,20 +44,50 @@ class Person:
         name = None
         level = 0
         power = 5
-        critical = power + 1
+        multiplier = 1
+        critical = power + multiplier
 
     name = None
     special = None
     xp = 0
     coins = 500
     crystals = 1
-    day = 0
     # Зелья
     potion_pow = 0
     potion_heal = 0
     potion_mana = 0
     # Сундуки
     pack_chest = 0
+
+# Класс статистики (цифра 5 в меню)
+class Stats():
+    xp = Person.xp # Опыт игрока
+    coins_up = 0 # Всего заработано монет
+    crystals_up = 0 # Всего заработано кристаллов
+    day = 0 # Дни, проведённые за игрой (игровые, вычисляются битвами)
+    chests_open = 0 # Всего открытых сундуков
+
+
+
+l_market = ["Зелье Силы", "Зелье Здоровья", "Зелье маны", "Сундук", "Кристаллы"]
+
+# Создание класса market (рынок)
+# Всего 5 ларьков. Они генерятся случайным образом
+class Market:
+    # Ларьки
+    stall_0 = rdm.choice(l_market)
+    stall_1 = rdm.choice(l_market)
+    stall_2 = rdm.choice(l_market)
+    stall_3 = rdm.choice(l_market)
+    stall_4 = rdm.choice(l_market)
+    # Переменная, позволяющая изменить генерацию ларьков (True - может/False - не может). По умолчанию False
+    edit = False
+    # Цена
+    price_0 = rdm.randint(3,30)
+    price_1 = rdm.randint(3,30)
+    price_2 = rdm.randint(3,30)
+    price_3 = rdm.randint(3,30)
+    price_4 = rdm.randint(3,30)
 
 # Проверка целостности файлов
 
@@ -183,10 +213,10 @@ if save.read(1) == '0':
 
 # Основное меню
 def menu():
+    print(Back.BLACK, Fore.WHITE)
     cls()
     if start_new == True:
         print("Если возникнут вопросы, пиши в меню: хелп/help\n")
-
     print(Back.GREEN, Fore.BLACK)
     print('=========OFFLINE RPG========')
     print(Back.CYAN, '    ПЕРСОНАЖ:', Person.name)
@@ -210,7 +240,7 @@ def menu():
         print('Монет:', Person.coins)
         print('Кристаллов: ', Person.crystals)
         print('--------------------------')
-        print('    Характеристика оружия:')
+        print('    Характеристика оружия:\n')
         print('Название:', Person.Weapon.name)
         print('Уровень:', Person.Weapon.level)
         print('Сила:', Person.Weapon.power)
@@ -232,7 +262,7 @@ def menu():
         print('Кристаллов: ', Person.crystals)
         print('Зелье силы:', Person.potion_pow)
         print('Зелье здоровья:', Person.potion_heal)
-        if Person.special == "Маг":
+        if Person.special == 'Маг':
             print('Зелье маны:', Person.potion_mana)
         print('Сундуков:',Person.pack_chest)
         print(Back.GREEN, Fore.BLACK)
@@ -242,10 +272,78 @@ def menu():
         print(Back.RESET, Fore.RESET)
         menu()
 
+    elif choose == '2':
+        go_dunge()
+
+    elif choose == '3':
+        market()
+
+# Рынок
+def market():
+    cls()
+    if start_new == True:
+        print(Back.WHITE, Fore.BLACK)
+        print('Это рынок. Здесь ты можешь приобрести необходимые тебе вещи.')
+        slp(4)
+        print('В рынке в основном можно купить лишь те вещи, которые ты сможешь поместить в инвентарь, а именно:\n1. Зелья\n2. Сундуки')
+        input('\nДля продолжения, нажми ENTER')
+        slp(1.7)
+        print('\nА вот, собственно, и рынок:')
+        slp(4)
+        cls()
+
+    print(Back.BLACK, Fore.WHITE)
+    # Проверка условия, когда можно заново генерировать ассортимент
+    if Market.edit == True:
+        # Ларьки
+        Market.stall_0 = rdm.choice(l_market)
+        Market.stall_1 = rdm.choice(l_market)
+        Market.stall_2 = rdm.choice(l_market)
+        Market.stall_3 = rdm.choice(l_market)
+        Market.stall_4 = rdm.choice(l_market)
+        # Цены
+        Market.price_0 = rdm.randint(3,30)
+        Market.price_1 = rdm.randint(3,30)
+        Market.price_2 = rdm.randint(3,30)
+        Market.price_3 = rdm.randint(3,30)
+        Market.price_4 = rdm.randint(3,30)
+
+    print(Back.GREEN, Fore.BLACK)
+    print('  ============================')
+    print(Back.CYAN, '              РЫНОК:')
+    print(Back.GREEN, Fore.BLACK, '============================')
+    print('Монет:', Person.coins)
+    print('Кристаллов: ', Person.crystals)
+    print('Зелье силы:', Person.potion_pow)
+    print('Зелье здоровья:', Person.potion_heal)
+    if Person.special == 'Маг':
+        print('Зелье маны:', Person.potion_mana)
+    print('Сундуков:', Person.pack_chest)
+    print(Back.GREEN, Fore.BLACK,'============================')
+    print(Back.MAGENTA, Fore.WHITE)
+    print('1.',Market.stall_0,'за',Market.price_0,'монет\n')
+    print('2.',Market.stall_1,'за',Market.price_1,'монет\n')
+    print('3.',Market.stall_2,'за',Market.price_2,'монет\n')
+    print('4.',Market.stall_3,'за',Market.price_3,'монет\n')
+    print('5.',Market.stall_4,'за',Market.price_4,'монет\n')
+    print(Back.GREEN, Fore.BLACK, '============================')
+
+    # Недоделал
+    market_choose = input('\nВаш выбор (exit/ENTER - выход из рынка): ==>')
+    if market_choose == "exit" or market_choose == "":
+        menu()
+
 
 # Недоделал
-
 # Сама игра
+def go_dunge():
+    if start_new:
+        cls()
+        print('\nЧто ж, мы дошли до самого интересного - до походов в данджи...')
+        input('\nНажми ENTER для продолжения')
+        # Недоделал
+
+
 
 # Загрузка сохранения
 save = open('System/save.txt', 'r')
@@ -253,7 +351,15 @@ save = open('System/save.txt', 'r')
 # Загрузка класса персонажа
 save.seek(0)
 save.readline()
-Person.special = save.readline()
+Person.special = str(save.readline())
+if Person.special == 'Мечник\n':
+    Person.special = 'Мечник'
+elif Person.special == 'Лучник\n':
+    Person.special = 'Лучник'
+elif Person.special == 'Маг\n':
+    Person.special = 'Маг'
+elif Person.special == 'Броневик\n':
+    Person.special = 'Броневик'
 
 ###########
 save.seek(0) # Сброс на начало файла
@@ -287,7 +393,13 @@ save.seek(0)
 ###########
 for i in range(7):
     save.readline()
-Person.Weapon.name = save.readline()
+Person.Weapon.name = str(save.readline())
+if Person.Weapon.name == "Меч\n":
+    Person.Weapon.name = "Меч"
+elif Person.Weapon.name == "Лук\n":
+    Person.Weapon.name = "Лук"
+elif Person.Weapon.name == "Магическая трость\n":
+    Person.Weapon.name = "Магическая трость"
 ###########
 save.close() # Закрытие сохранения
 
@@ -296,31 +408,31 @@ save_inventory = open('System/pack.txt', 'r')
 ###########
 # Загрузка зелья силы
 save_inventory.seek(0)
-Person.potion_pow = save_inventory.read(1)
+Person.potion_pow = int(save_inventory.read(1))
 ###########
 # Загрузка зелья здоровья
 save_inventory.seek(1)
-Person.potion_heal = save_inventory.read(1)
+Person.potion_heal = int(save_inventory.read(1))
 ###########
 # Загрузка зелья маны
 save_inventory.seek(2)
-Person.potion_mana = save_inventory.read(1)
+Person.potion_mana = int(save_inventory.read(1))
 ###########
 # Загрузка сундуков
 save_inventory.seek(3)
-Person.pack_chest = save_inventory.read(1)
+Person.pack_chest = int(save_inventory.read(1))
 ###########
 
 # Загрузка имени
 text_name = open('System/name.txt', 'r')
-Person.name = text_name.read()
+Person.name = str(text_name.read())
 text_name.close()
 
 
 cls()
 if start_new == True:
-    print('Вот меню, которое ты будешь видеть при каждом заходе в игру. Пора уже привыкать...\n')
-    input('НАЖМИ ENTER ЧТОБЫ ЕГО УВИДЕТЬ')
+    print('\nВот меню, которое ты будешь видеть при каждом заходе в игру. Пора уже привыкать...\n')
+    input('\nНАЖМИ ENTER ЧТОБЫ ЕГО УВИДЕТЬ')
     cls()
 
 menu()
