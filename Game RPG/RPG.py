@@ -13,7 +13,11 @@ from colorama import init
 from colorama import Fore, Back, Style
 init()
 
+# Технические переменные
+##################
 start_new = False # Изначально обучение отключено. Оно включается только в самом начале прохождения
+x = 0 # Для ранка
+##################
 
 # Быстрая очистка экрана
 def cls():
@@ -70,7 +74,7 @@ class Person:
 
 
 
-l_market = ["Зелье Силы", "Зелье Здоровья", "Зелье маны", "Сундук", "Кристаллы"]
+l_market = ["Зелье Силы", "Зелье Здоровья", "Зелье маны", "Сундук", "Кристалл"]
 
 # Создание класса market (рынок)
 # Всего 5 ларьков. Они генерятся случайным образом
@@ -92,44 +96,47 @@ class Market:
 
 # Проверка целостности файлов
 
-# Проверка на наличие файла "save.txt" в папке System
-try:
-    save = open('System/save.txt', 'r')
-except FileNotFoundError:
-    print('Файла save.txt не существует. Создание нового сохранения...')
-    slp(1)
+# Для упрощения
+def reset_game():
     try:
         save = open('System/save.txt', 'w')
         save.write('0')
         save.close()
-    except FileNotFoundError:
-        fun_err()
 
-# Проверка на наличие файла "pack.txt" в папке System
-try:
-    pack = open('System/pack.txt', 'r')
-except FileNotFoundError:
-    print('Файла pack.txt не существует. Создание нового файла...')
-    slp(1)
-    try:
         pack = open('System/pack.txt', 'w')
         pack.write('0000')
         pack.close()
-    except FileNotFoundError:
-        fun_err()
 
-# Проверка на наличие файла "name.txt" в папке System
-try:
-    name = open('System/name.txt', 'r')
-except FileNotFoundError:
-    print('Файла name.txt не существует. Создание нового файла...')
-    slp(1)
-    try:
         name = open('System/name.txt', 'w')
         name.write('Герой')
         name.close()
     except FileNotFoundError:
         fun_err()
+
+
+# Проверка на наличие файла "save.txt" в папке System
+try:
+    save = open('System/save.txt', 'r')
+except FileNotFoundError:
+    print('Файла save.txt не существует. Сброс игры...')
+    slp(1)
+    reset_game()
+
+# Проверка на наличие файла "pack.txt" в папке System
+try:
+    pack = open('System/pack.txt', 'r')
+except FileNotFoundError:
+    print('Файла pack.txt не существует. Сброс игры...')
+    slp(1)
+    reset_game()
+
+# Проверка на наличие файла "name.txt" в папке System
+try:
+    name = open('System/name.txt', 'r')
+except FileNotFoundError:
+    print('Файла name.txt не существует. Сброс игры...')
+    slp(1)
+    reset_game()
 
 # ВНИМАНИЕ! При проверке и одновременно чтение файла, чтение сдвигается!
 save = open('System/save.txt', 'r')
@@ -139,14 +146,9 @@ if save.read(1) != '0': # Суть данного if-а: Если сохране
     save.seek(0)
     # Окончательная проверка
     if save.read(1) != '1':
-        print('Файл save.txt Был необратимо изменен. Создание нового сохранения...')
+        print('Файл save.txt Был необратимо изменен. Сброс игры...')
         slp(1.2)
-        try:
-            save = open('System/save.txt', 'w')
-            save.write('0')
-            save.close()
-        except FileNotFoundError:
-            fun_err()
+        reset_game()
 
 # Открытие файла save.txt
 save = open('System/save.txt', 'r')
@@ -158,7 +160,8 @@ if save.read(1) == '0':
     text_name = open('System/name.txt', 'w')
     text_name.write(Person.name)
     print('\nВаше новое имя:',Person.name)
-    print('\nЧтобы его изменить, пройдите по пути:\n "Корневая папка/System/name.txt"\nИ прописывайте новое, оригинальное на ваш взгляд имя :)\n\nВНИМАНИЕ! Настоятельно не рекомендуем удалять файл name.txt\n')
+    print('\nЧтобы его изменить, пройдите по пути:\n "Корневая папка/System/name.txt"\nИ прописывайте новое, оригинальное на ваш взгляд имя :)\n\n',Back.RED,Fore.WHITE,'ВНИМАНИЕ! Настоятельно не рекомендуем удалять файл name.txt\n')
+    print(Fore.WHITE,Back.BLACK)
     slp(5)
     text_name.close()
     # Выбор класса перса
@@ -291,6 +294,7 @@ def market():
         input('\nДля продолжения, нажми ENTER')
         slp(1.7)
         print('\nА вот, собственно, и рынок:')
+        print(Back.BLACK,Fore.WHITE)
         slp(4)
         cls()
 
@@ -351,25 +355,40 @@ def market():
         save_inventory.write('{0}{1}{2}{3}'.format(Person.potion_pow, Person.potion_heal, Person.potion_mana, Person.pack_chest))
         save_inventory.close()
 
-    def m_buy(): # l_market = ["Зелье Силы", "Зелье Здоровья", "Зелье маны", "Сундук", "Кристаллы"]
+    def m_buy(): # l_market = ["Зелье Силы", "Зелье Здоровья", "Зелье маны", "Сундук", "Кристалл"]
+        global x
+
+        print(Back.BLACK, Fore.WHITE)
         cls()
         if market_choose == 'Зелье Силы':
-            print(Back.BLACK, Fore.WHITE)
-            print(Back.GREEN, Fore.BLACK, '\nПокупка совершена!')
-            slp(0.8)
-            Person.potion_pow += 1
-            m_write_pack()
-            m_write_save()
-            menu()
+            if Person.potion_pow >= 9:
+                print('\n\nВы не можете хранить больше 9-ти зелий одного вида!')
+                Person.coins += x
+                x = 0
+                input('\nНАЖМИТЕ ENTER, ЧТОБЫ ПРОДОЛЖИТЬ')
+                market()
+            else:
+                print(Back.GREEN, Fore.BLACK, '\nПокупка совершена!')
+                slp(0.8)
+                Person.potion_pow += 1
+                m_write_pack()
+                m_write_save()
+                menu()
 
         elif market_choose == 'Зелье Здоровья':
-            print(Back.BLACK, Fore.WHITE)
-            print(Back.GREEN, Fore.BLACK, '\nПокупка совершена!')
-            slp(0.8)
-            Person.potion_heal += 1
-            m_write_pack()
-            m_write_save()
-            menu()
+            if Person.potion_heal >= 9:
+                print('\n\nВы не можете хранить больше 9-ти зелий одного вида!')
+                Person.coins += x
+                x = 0
+                input('\nНАЖМИТЕ ENTER, ЧТОБЫ ПРОДОЛЖИТЬ')
+                market()
+            else:
+                print(Back.GREEN, Fore.BLACK, '\nПокупка совершена!')
+                slp(0.8)
+                Person.potion_heal += 1
+                m_write_pack()
+                m_write_save()
+                menu()
 
         elif market_choose == 'Зелье маны':
             if Person.special != "Маг":
@@ -379,30 +398,48 @@ def market():
                 market()
 
             else:
-                print(Back.BLACK, Fore.WHITE)
+                if Person.potion_mana >= 9:
+                    print('\n\nВы не можете хранить больше 9-ти зелий одного вида!')
+                    Person.coins += x
+                    x = 0
+                    input('\nНАЖМИТЕ ENTER, ЧТОБЫ ПРОДОЛЖИТЬ')
+                    market()
+                else:
+                    print(Back.GREEN, Fore.BLACK, '\nПокупка совершена!')
+                    slp(0.8)
+                    Person.potion_mana += 1
+                    m_write_pack()
+                    m_write_save()
+                    menu()
+
+        elif market_choose == 'Сундук':
+            if Person.pack_chest >= 9:
+                print('\n\nВы не можете хранить больше 9-ти зелий одного вида!')
+                Person.coins += x
+                x = 0
+                input('\nНАЖМИТЕ ENTER, ЧТОБЫ ПРОДОЛЖИТЬ')
+                market()
+            else:
                 print(Back.GREEN, Fore.BLACK, '\nПокупка совершена!')
                 slp(0.8)
-                Person.potion_mana += 1
+                Person.pack_chest += 1
                 m_write_pack()
                 m_write_save()
                 menu()
 
-        elif market_choose == 'Сундук':
-            print(Back.GREEN, Fore.BLACK, '\nПокупка совершена!')
-            print(Back.BLACK, Fore.WHITE)
-            slp(0.8)
-            Person.pack_chest += 1
-            m_write_pack()
-            m_write_save()
-            menu()
-
-        elif market_choose == 'Кристаллы':
-            print(Back.GREEN, Fore.BLACK, '\nПокупка совершена!')
-            print(Back.BLACK,Fore.WHITE)
-            slp(0.8)
-            Person.crystals += 1
-            m_write_save()
-            menu()
+        elif market_choose == 'Кристалл':
+            if Person.crystals >= 9:
+                print('\n\nВы не можете хранить больше 9-ти зелий одного вида!')
+                Person.coins += x
+                x = 0
+                input('\nНАЖМИТЕ ENTER, ЧТОБЫ ПРОДОЛЖИТЬ')
+                market()
+            else:
+                print(Back.GREEN, Fore.BLACK, '\nПокупка совершена!')
+                slp(0.8)
+                Person.crystals += 1
+                m_write_save()
+                menu()
 
     ####################
 
@@ -410,30 +447,38 @@ def market():
     # Недоделал
     # Варианты выбора
     market_choose = input('\nВаш выбор (exit/ENTER - выход из рынка): ==>')
+
+
     if market_choose == "exit" or market_choose == "":
         menu()
+
     elif market_choose == '1':
         market_choose = Market.stall_0
-        if market_choose != 'Кристаллы':
+        if market_choose != 'Кристалл':
+            # Открытие сохранения
             save_inventory = open('System/pack.txt', 'r')
             save_inventory.seek(0)
 
             if Person.coins >= Market.price_0:
-                if int(save_inventory.read(1)) > 9:
-                    save_inventory.close()
-                    potion_more()
-                else:
-                    Person.coins -= Market.price_0
-                    m_buy()
-            else:
-                print('Для покупки не хватает',(Market.price_0 - Person.coins),'монет!')
-
-        else:
-            if Person.coins >= Market.price_0:
-                Person.coins -= Market.price_0
+                x = Market.price_0
+                Person.coins -= x
                 m_buy()
             else:
                 print('Для покупки не хватает',(Market.price_0 - Person.coins),'монет!')
+                print(Back.BLACK, Fore.WHITE)
+                slp(3.2)
+                market()
+
+        else:
+            if Person.coins >= Market.price_0:
+                x = Market.price_0 # Временная переменная для проверок
+                Person.coins -= x
+                m_buy()
+            else:
+                print(Back.RED,Fore.BLACK,'\n\nДля покупки не хватает',(Market.price_0 - Person.coins),'монет!')
+                print(Back.BLACK,Fore.WHITE)
+                slp(3.2)
+                market()
 
 
 
@@ -507,7 +552,7 @@ save.seek(0)
 ###########
 # Загрузка названия оружия
 ###########
-for i in range(7):
+for i in range(8):
     save.readline()
 Person.Weapon.name = str(save.readline())
 if Person.Weapon.name == "Меч\n":
