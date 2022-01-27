@@ -45,12 +45,13 @@ class Person:
         name = None
         level = 0
         power = 5
-        multiplier = 1
-        critical = power + multiplier
+        critical = power * 1.5
 
     name = None
     special = None
-    xp = 0
+    xp = 0 # Опыт
+    level = 1 # Уровень
+    multiplier = level * 12 # Множитель уровня (именно столько нужно опыта для достижения нового уровня)
     day = 0  # Дни, проведённые за игрой (игровые, вычисляются битвами)
     coins = 500
     crystals = 1
@@ -190,7 +191,7 @@ if save.read(1) == '0':
     save = open('System/save.txt', 'w')
     # подробнее есть в файле "моя рпгшка.txt"
 
-    save.writelines(['1\n', '{0}\n'.format(Person.special), '0\n', '0\n', '500\n', '1\n', '0\n', Person.Weapon.name])
+    save.writelines(['1\n', '{0}\n'.format(Person.special), '0\n','{0}\n'.format(Person.level) ,'0\n', '500\n', '1\n', '0\n', Person.Weapon.name])
     save.close()
     slp(1)
     cls()
@@ -237,6 +238,7 @@ def menu():
         # Решил разделить на несколько принтов, так редактировать проще
         print('Класс:', Person.special)
         print('Опыт:', Person.xp)
+        print('Уровень:', Person.level)
         print('Монет:', Person.coins)
         print('Кристаллов: ', Person.crystals)
         print('--------------------------')
@@ -352,34 +354,37 @@ def market():
     def m_buy(): # l_market = ["Зелье Силы", "Зелье Здоровья", "Зелье маны", "Сундук", "Кристаллы"]
         cls()
         if market_choose == 'Зелье Силы':
-            print(Back.GREEN, Fore.BLACK, '\nПокупка совершена!')
             print(Back.BLACK, Fore.WHITE)
+            print(Back.GREEN, Fore.BLACK, '\nПокупка совершена!')
             slp(0.8)
             Person.potion_pow += 1
             m_write_pack()
+            m_write_save()
             menu()
 
         elif market_choose == 'Зелье Здоровья':
-            print(Back.GREEN, Fore.BLACK, '\nПокупка совершена!')
             print(Back.BLACK, Fore.WHITE)
+            print(Back.GREEN, Fore.BLACK, '\nПокупка совершена!')
             slp(0.8)
             Person.potion_heal += 1
             m_write_pack()
+            m_write_save()
             menu()
 
         elif market_choose == 'Зелье маны':
             if Person.special != "Маг":
-                print(Person.special,'не может покупать зелье маны!')
                 print(Back.BLACK, Fore.WHITE)
+                print(Person.special,'не может покупать зелье маны!')
                 slp(3)
                 market()
 
             else:
-                print(Back.GREEN, Fore.BLACK, '\nПокупка совершена!')
                 print(Back.BLACK, Fore.WHITE)
+                print(Back.GREEN, Fore.BLACK, '\nПокупка совершена!')
                 slp(0.8)
                 Person.potion_mana += 1
                 m_write_pack()
+                m_write_save()
                 menu()
 
         elif market_choose == 'Сундук':
@@ -388,6 +393,7 @@ def market():
             slp(0.8)
             Person.pack_chest += 1
             m_write_pack()
+            m_write_save()
             menu()
 
         elif market_choose == 'Кристаллы':
@@ -462,22 +468,34 @@ elif Person.special == 'Броневик\n':
 ###########
 save.seek(0) # Сброс на начало файла
 
-# Загрузка опыта, монет и кристаллов
+# Загрузка опыта, уровня, монет и кристаллов
 ###########
 # xp
 for i in range(2):
     save.readline()
 Person.xp = int(save.readline())
 save.seek(0)
-# coins
+# level
 for i in range(3):
     save.readline()
-Person.Weapon.level = int(save.readline())
+Person.level = int(save.readline())
 save.seek(0)
-# crystals
+
+# coins
 for i in range(5):
     save.readline()
+Person.coins = int(save.readline())
+save.seek(0)
+# crystals
+for i in range(6):
+    save.readline()
 Person.crystals = int(save.readline())
+save.seek(0)
+###########
+# Загрузка уровня оружия
+for i in range(4):
+    save.readline()
+Person.Weapon.level = int(save.readline())
 save.seek(0)
 ###########
 # Загрузка дней, проведённых за игрой
@@ -498,6 +516,8 @@ elif Person.Weapon.name == "Лук\n":
     Person.Weapon.name = "Лук"
 elif Person.Weapon.name == "Магическая трость\n":
     Person.Weapon.name = "Магическая трость"
+elif Person.Weapon.name == "Щит\n":
+    Person.Weapon.name = "Щит"
 ###########
 save.close() # Закрытие сохранения
 
