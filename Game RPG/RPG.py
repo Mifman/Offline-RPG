@@ -480,6 +480,118 @@ def market():
                 slp(3.2)
                 market()
 
+    elif market_choose == '2':
+        market_choose = Market.stall_1
+        if market_choose != 'Кристалл':
+            # Открытие сохранения
+            save_inventory = open('System/pack.txt', 'r')
+            save_inventory.seek(0)
+
+            if Person.coins >= Market.price_1:
+                x = Market.price_1
+                Person.coins -= x
+                m_buy()
+            else:
+                print('Для покупки не хватает',(Market.price_1 - Person.coins),'монет!')
+                print(Back.BLACK, Fore.WHITE)
+                slp(3.2)
+                market()
+
+        else:
+            if Person.coins >= Market.price_1:
+                x = Market.price_1 # Временная переменная для проверок
+                Person.coins -= x
+                m_buy()
+            else:
+                print(Back.RED,Fore.BLACK,'\n\nДля покупки не хватает',(Market.price_1 - Person.coins),'монет!')
+                print(Back.BLACK,Fore.WHITE)
+                slp(3.2)
+                market()
+
+    elif market_choose == '3':
+        market_choose = Market.stall_2
+        if market_choose != 'Кристалл':
+            # Открытие сохранения
+            save_inventory = open('System/pack.txt', 'r')
+            save_inventory.seek(0)
+
+            if Person.coins >= Market.price_2:
+                x = Market.price_2
+                Person.coins -= x
+                m_buy()
+            else:
+                print('Для покупки не хватает',(Market.price_2 - Person.coins),'монет!')
+                print(Back.BLACK, Fore.WHITE)
+                slp(3.2)
+                market()
+
+        else:
+            if Person.coins >= Market.price_2:
+                x = Market.price_2 # Временная переменная для проверок
+                Person.coins -= x
+                m_buy()
+            else:
+                print(Back.RED,Fore.BLACK,'\n\nДля покупки не хватает',(Market.price_2 - Person.coins),'монет!')
+                print(Back.BLACK,Fore.WHITE)
+                slp(3.2)
+                market()
+
+    elif market_choose == '4':
+        market_choose = Market.stall_3
+        if market_choose != 'Кристалл':
+            # Открытие сохранения
+            save_inventory = open('System/pack.txt', 'r')
+            save_inventory.seek(0)
+
+            if Person.coins >= Market.price_3:
+                x = Market.price_3
+                Person.coins -= x
+                m_buy()
+            else:
+                print('Для покупки не хватает',(Market.price_3 - Person.coins),'монет!')
+                print(Back.BLACK, Fore.WHITE)
+                slp(3.2)
+                market()
+
+        else:
+            if Person.coins >= Market.price_3:
+                x = Market.price_3 # Временная переменная для проверок
+                Person.coins -= x
+                m_buy()
+            else:
+                print(Back.RED,Fore.BLACK,'\n\nДля покупки не хватает',(Market.price_3 - Person.coins),'монет!')
+                print(Back.BLACK,Fore.WHITE)
+                slp(3.2)
+                market()
+
+    elif market_choose == '5':
+        market_choose = Market.stall_4
+        if market_choose != 'Кристалл':
+            # Открытие сохранения
+            save_inventory = open('System/pack.txt', 'r')
+            save_inventory.seek(0)
+
+            if Person.coins >= Market.price_4:
+                x = Market.price_4
+                Person.coins -= x
+                m_buy()
+            else:
+                print('Для покупки не хватает',(Market.price_4 - Person.coins),'монет!')
+                print(Back.BLACK, Fore.WHITE)
+                slp(3.2)
+                market()
+
+        else:
+            if Person.coins >= Market.price_4:
+                x = Market.price_4 # Временная переменная для проверок
+                Person.coins -= x
+                m_buy()
+            else:
+                print(Back.RED,Fore.BLACK,'\n\nДля покупки не хватает',(Market.price_4 - Person.coins),'монет!')
+                print(Back.BLACK,Fore.WHITE)
+                slp(3.2)
+                market()
+
 
 
 
