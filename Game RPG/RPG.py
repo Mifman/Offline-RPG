@@ -308,11 +308,11 @@ def market():
         Market.stall_3 = rdm.choice(l_market)
         Market.stall_4 = rdm.choice(l_market)
         # Цены
-        Market.price_0 = rdm.randint(3,30)
-        Market.price_1 = rdm.randint(3,30)
-        Market.price_2 = rdm.randint(3,30)
-        Market.price_3 = rdm.randint(3,30)
-        Market.price_4 = rdm.randint(3,30)
+        Market.price_0 = rdm.randint(3, 50)
+        Market.price_1 = rdm.randint(3, 30)
+        Market.price_2 = rdm.randint(3, 45)
+        Market.price_3 = rdm.randint(5, 30)
+        Market.price_4 = rdm.randint(3, 35)
 
     print(Back.GREEN, Fore.BLACK)
     print('  ============================')
@@ -345,7 +345,7 @@ def market():
     # Пересохраение основного "save.txt"
     def m_write_save():
         save = open('System/save.txt', 'w')
-        save.write('1\n{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n{6}'.format(Person.special,Person.xp,Person.Weapon.level,Person.coins,Person.crystals,Person.day,Person.Weapon.name))
+        save.write('1\n{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n{6}\{7}'.format(Person.special,Person.xp,Person.level,Person.Weapon.level,Person.coins,Person.crystals,Person.day,Person.Weapon.name))
         save.close()
 
     # Пересохраение инвентаря игрока (pack.txt)
