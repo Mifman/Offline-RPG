@@ -57,7 +57,9 @@ class Person:
     level = 1 # Уровень
     multiplier = level * 12 # Множитель уровня (именно столько нужно опыта для достижения нового уровня)
     day = 0  # Дни, проведённые за игрой (игровые, вычисляются битвами)
-    coins = 500
+    can_dunge = 0 # Переменная, позволяющая ходить на другие данджи (нужна в меню выбора данджа. Она играет чисто декоративную роль)
+    current_dunge = None # Переменная, определяющая в каком дандже сейчас находится игрок
+    coins = 50
     crystals = 1
     # Зелья
     potion_pow = 0
@@ -160,7 +162,7 @@ if save.read(1) == '0':
     text_name = open('System/name.txt', 'w')
     text_name.write(Person.name)
     print('\nВаше новое имя:',Person.name)
-    print('\nЧтобы его изменить, пройдите по пути:\n "Корневая папка/System/name.txt"\nИ прописывайте новое, оригинальное на ваш взгляд имя :)\n\n',Back.RED,Fore.WHITE,'ВНИМАНИЕ! Настоятельно не рекомендуем удалять файл name.txt\n')
+    print('\nЧтобы его изменить, пройдите по пути:\n "Корневая папка/System/name.txt"\nИ прописывайте новое, оригинальное на ваш взгляд имя :)\n\n',Back.RED,Fore.WHITE,'ВНИМАНИЕ! Настоятельно не рекомендуем удалять файлы из папки "System"!\n')
     print(Fore.WHITE,Back.BLACK)
     slp(5)
     text_name.close()
@@ -206,7 +208,7 @@ if save.read(1) == '0':
     print('В игре, помимо драк и разрушений, можно прокачивать своего персонажа (чтобы потом отпинывать врагов ещё сильней)\n')
     input('ДЛЯ ПРОДОЛЖЕНИЯ НАЖМИ ENTER')
     cls()
-    print('В данный момент, у тебя должно быть в карманах 500 монет и 1 кристалл.\nЭто так называемая игровая валюта, на которую можно покупать различные предметы, а также прокачивать своего персонажа.\n')
+    print('В данный момент, у тебя должно быть в карманах 50 монет и 1 кристалл.\nЭто так называемая игровая валюта, на которую можно покупать различные предметы, а также прокачивать своего персонажа.\n')
     input('ДЛЯ ПРОДОЛЖЕНИЯ НАЖМИ ENTER')
     cls()
     print('Ты, конечно, можешь прямо сейчас пойти и крушить всех направо и налево, но это вряд ли.\nВедь у тебя нет выбора, кроме как читать мои монологи и делать то, что я тебе прикажу :)\nНапример:\n')
@@ -601,7 +603,7 @@ def go_dunge():
         cls()
         print(Back.WHITE,Fore.BLACK,'\nЧто ж, мы дошли до самого интересного - до походов в данджи...')
         input('\nНажми ENTER для продолжения')
-        print('\nЗдесь, по сути, происходит вся игра. На данджах основана вся игра.')
+        print('\nЗдесь, по сути, происходит набив опыта и прочих плюшек. На данджах основана вся игра.')
         slp(3)
         input('\nНажми ENTER для продолжения')
         print(Fore.WHITE, Back.BLACK)
@@ -610,13 +612,120 @@ def go_dunge():
         print(Back.WHITE,Fore.BLACK,'\nКак играть?')
         print('Игра не замысловата. Выбираешь вид данджа (открывается по мере роста уровня игрока),\n Сражаешься с врагами и другими игроками (они не совсем настоящие), и открываешь сундуки.\nОпыт за прохождение данджа тоже имеется.')
         input('\nНажми ENTER для продолжения')
-        print(Fore.WHITE, Back.BLACK)
         cls()
+        print(Fore.WHITE, Back.BLACK)
         slp(1.5)
         print('Что ж, теперь ты полноценный игрок в OFFLINE RPG.')
-        input('\nНажми ENTER для продолжения')
-        # Недоделал
+        input('\nНажми ENTER для выбора данджей')
+    # Недоделал
+    cls()
+    print(Back.GREEN, Fore.BLACK)
+    print('=========OFFLINE RPG========')
+    print('Опыт:', Person.xp)
+    print('Уровень:', Person.level)
+    print('Монет:', Person.coins)
+    print('Кристаллов: ', Person.crystals)
+    print("")
 
+    print(Back.MAGENTA, Fore.WHITE)
+
+
+    print("0 - Лес (1 уровень)")
+    print("1 - Подземелье (10 уровень)")
+
+    if Person.can_dunge >= 1: # См. класс Person
+        print("2 - Густой лес (30 уровень)")
+
+    if Person.can_dunge >= 2:
+        print("3 - Заброшенный замок (40 уровень)")
+
+    if Person.can_dunge >= 3:
+        print("4 - Супер-Подземелье (50 уровень)")
+
+    if Person.can_dunge >= 4:
+        print("5 - Изумрудный лес (60 уровень)")
+
+    # Выбор данджа
+    choose = input("Ваш выбор: ==> ")
+
+    if choose == "0":
+        slp(0.5)
+        print(Back.WHITE, Fore.BLACK) # Белый фон, чёрный шрифт (фон битв)
+        print("\nВаш выбор: Лес")
+        Person.current_dunge = "Лес"
+
+    elif choose == "1":
+        if Person.level < 10:
+            print("\nВы не достигли 10 уровня!")
+            slp(3)
+            cls()
+            go_dunge()
+        else:
+            print(Back.WHITE, Fore.BLACK)  # Белый фон, чёрный шрифт (фон битв)
+            print("\nВаш выбор: Подземелье")
+            Person.current_dunge = "Подземелье"
+
+    elif choose == "2" and Person.level > 9:
+        if Person.level < 30:
+            print("\nВы не достигли 30 уровня!")
+            slp(3)
+            cls()
+            go_dunge()
+        else:
+            print(Back.WHITE, Fore.BLACK)  # Белый фон, чёрный шрифт (фон битв)
+            print("\nВаш выбор: Густой лес")
+            Person.current_dunge = "Густой лес"
+
+    elif choose == "3" and Person.level > 29:
+        if Person.level < 40:
+            print("\nВы не достигли 40 уровня!")
+            slp(3)
+            cls()
+            go_dunge()
+        else:
+            print(Back.WHITE, Fore.BLACK)  # Белый фон, чёрный шрифт (фон битв)
+            print("\nВаш выбор: Заброшенный замок")
+            Person.current_dunge = "Заброшенный замок"
+
+    elif choose == "4" and Person.level > 39:
+        if Person.level < 50:
+            print("\nВы не достигли 50 уровня!")
+            slp(3)
+            cls()
+            go_dunge()
+        else:
+            print(Back.WHITE, Fore.BLACK)  # Белый фон, чёрный шрифт (фон битв)
+            print("\nВаш выбор: Супер-Подземелье")
+            Person.current_dunge = "Супер-Подземелье"
+
+    elif choose == "5" and Person.level > 49:
+        if Person.level < 60:
+            print("\nВы не достигли 60 уровня!")
+            slp(3)
+            cls()
+            go_dunge()
+        else:
+            print(Back.WHITE, Fore.BLACK)  # Белый фон, чёрный шрифт (фон битв)
+            print("\nВаш выбор: Изумрудный лес")
+            Person.current_dunge = "Изумрудный лес"
+
+    else:
+        print("\nВыберите дандж из списка!")
+        slp(3)
+        cls()
+        go_dunge()
+
+
+    slp(2)
+    сountdown = 3
+    for i in range(3):
+        cls()
+        print(Back.WHITE, Fore.BLACK)
+        print("Вход через ", end='')
+        print(сountdown)
+        slp(1)
+        сountdown -= 1
+        cls()
 
 
 # Загрузка сохранения
@@ -649,6 +758,19 @@ save.seek(0)
 for i in range(3):
     save.readline()
 Person.level = int(save.readline())
+
+if Person.level > 9 and Person.level < 30:
+    Person.can_dunge = 1
+
+elif Person.level > 29 and Person.level < 40:
+    Person.can_dunge = 2
+
+elif Person.level > 39 and Person.level < 50:
+    Person.can_dunge = 3
+
+elif Person.level > 49:
+    Person.can_dunge = 4
+
 save.seek(0)
 
 # coins
