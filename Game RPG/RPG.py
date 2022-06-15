@@ -48,7 +48,7 @@ class Person:
     class Weapon:
         name = None
         level = 0
-        power = 5
+        power = 5 + level
         critical = power * 1.5
 
     name = None
@@ -61,6 +61,8 @@ class Person:
     current_dunge = None # Переменная, определяющая в каком дандже сейчас находится игрок
     coins = 50
     crystals = 1
+    hp = 20 # Кол-во жизней
+    hp_multiplier = hp + (level + 1) # Столько будет hp После повышения уровня
     # Зелья
     potion_pow = 0
     potion_heal = 0
@@ -598,6 +600,50 @@ def market():
 
 # Недоделал
 # Сама игра
+
+# Вход в дандж и само путешествие
+def dunge():
+    # Ввод данных в класс Dunge (см dunges.py)
+    if Person.current_dunge == "Лес":
+        d.forest()
+    elif Person.current_dunge == "Подземелье":
+        d.dungeon()
+    elif Person.current_dunge == "Густой лес":
+        d.dense_forest()
+    elif Person.current_dunge == "Заброшенный замок":
+        d.castle()
+    elif Person.current_dunge == "Супер-Подземелье":
+        d.super_dungeon()
+    else:
+        d.emerald_forest()
+
+
+    for lm in range(d.Dunge.level_max): # Цикл, длина которого определяется длиной данджа
+        print("\n\n")
+        slp(1)
+        print(Back.GREEN, Fore.BLACK)
+        print("======================================")
+        print(Back.MAGENTA, Fore.WHITE)
+        print("Дандж: ", d.Dunge.name)
+        print("Текущая часть данджа: ", d.Dunge.level)
+        print("ХП: ", Person.hp)
+        print("Зельей Силы: ", Person.potion_pow)
+        print("Зельей Здоровья: ", Person.potion_heal)
+
+        if Person.special == "Маг":
+            print("Зельей Маны: ", Person.potion_mana)
+
+        print(Back.GREEN, Fore.BLACK)
+        print("======================================")
+        slp(4)
+        print(Back.WHITE, Fore.BLACK)
+        print("\nАнализ:", end='')
+        for i in range(10):
+            print("#", end='')
+            slp(0.6)
+        slp(1)
+
+# Выбор данджа
 def go_dunge():
     if start_new:
         cls()
@@ -717,8 +763,8 @@ def go_dunge():
 
 
     slp(2)
-    сountdown = 3
-    for i in range(3):
+    сountdown = 5
+    for i in range(5):
         cls()
         print(Back.WHITE, Fore.BLACK)
         print("Вход через ", end='')
@@ -726,6 +772,8 @@ def go_dunge():
         slp(1)
         сountdown -= 1
         cls()
+
+    dunge() # Вызов игры
 
 
 # Загрузка сохранения
