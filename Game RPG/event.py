@@ -1,6 +1,6 @@
 import random as rdm
 import dunges as d # файл dunges.py
-import RPG as g # файл RPG.py
+from RPG import Person as g # файл RPG.py
 
 from colorama import init
 from colorama import Fore, Back, Style
@@ -121,7 +121,7 @@ def lich():
 
 # Зомби
 def zombi():
-    Enemy.name = "Скелет"
+    Enemy.name = "Зомби"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 3)
     Enemy.hp = 4 + Enemy.level + rdm.randint(0, 3)
     Enemy.loot = rdm.randint(0, 1)
