@@ -1,5 +1,10 @@
 import random as rdm
 import dunges as d # файл dunges.py
+import RPG as g # файл RPG.py
+
+from colorama import init
+from colorama import Fore, Back, Style
+init()
 
 # Класс врагов (Имя, его уровень, урон (зависит от уровня), жизней (также зависит от уровня), критический урон, кол-во выпадающего лута)
 class Enemy:
@@ -10,6 +15,7 @@ class Enemy:
     critical = damage * 1.5
     loot = 0
 
+
 ##########################
 # Виды врагов
 
@@ -17,7 +23,7 @@ class Enemy:
 def goblin():
     Enemy.name = "Гоблин"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 2)
-    Enemy.loot = rdm.randint(0,1)
+    Enemy.loot = rdm.randint(0, 1)
 
 # Орк
 def ork():
@@ -121,3 +127,39 @@ def zombi():
     Enemy.loot = rdm.randint(0, 1)
 
 ##########################
+# Виды лута
+l_list = ["Монет", "Зелий Силы", "Зелий Здоровья", "Зелий Маны", "Сундук(-а)", "Кристалл(-ов)"] # Лист со всеми видами лутов (вставляется в конце предложения)
+l_name = None # Название лута
+l_amount = 0
+
+def set_loot():
+    # Недоделал
+    if l_name == l_list[0]: # coins
+        g.Person.coins += l_amount
+
+    elif l_name == l_list[1]: # pow
+        g.Person.potion_pow += l_amount
+
+    elif l_name == l_list[2]: # heal
+        g.Person.potion_heal += l_amount
+
+    elif l_name == l_list[3]: # mana
+        if g.Person.special == "Маг":
+            g.Person.potion_mana += l_amount
+        else:
+            print(g.Person.special, 'не может брать зелье маны!')
+
+    elif l_name == l_list[4]: # chest
+        g.Person.pack_chest += l_amount
+
+    elif l_name == l_list[5]: # crystal
+        g.Person.crystals += l_amount
+
+##########################
+
+##########################
+# Получение лута
+def get_loot():
+    print(Back.WHITE, Fore.BLACK)
+    # Недоделал
+    print("\n", g.Person.name, "Получает")
