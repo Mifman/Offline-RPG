@@ -18,6 +18,15 @@ init()
 start_new = False # Изначально обучение отключено. Оно включается только в самом начале прохождения
 x = 0 # Для рынка
 ##################
+# Техническая(-ие) функция(-и)
+def potion_more(x):
+    print(Back.RED, Fore.WHITE, '\nВы не можете хранить больше 9-ти зелий/сундуков/кристаллов одного вида!')
+    Person.coins += x
+    x = 0
+    input('\nНАЖМИТЕ ENTER, ЧТОБЫ ПРОДОЛЖИТЬ')
+    market()
+
+##################
 
 # Быстрая очистка экрана
 def cls():
@@ -97,6 +106,19 @@ class Market:
     price_2 = rdm.randint(3,45)
     price_3 = rdm.randint(5,30)
     price_4 = rdm.randint(3,35)
+
+# Пересохраение основного "save.txt"
+def m_write_save():
+    save = open('System/save.txt', 'w')
+    save.write('1\n{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n{6}\{7}'.format(Person.special,Person.xp,Person.level,Person.Weapon.level,Person.coins,Person.crystals,Person.day,Person.Weapon.name))
+    save.close()
+
+# Пересохраение инвентаря игрока (pack.txt)
+def m_write_pack():
+    save_inventory = open('System/pack.txt', 'w')
+    save_inventory.seek(0)
+    save_inventory.write('{0}{1}{2}{3}'.format(Person.potion_pow, Person.potion_heal, Person.potion_mana, Person.pack_chest))
+    save_inventory.close()
 
 # Проверка целостности файлов
 
@@ -198,7 +220,7 @@ if save.read(1) == '0':
     save = open('System/save.txt', 'w')
     # подробнее есть в файле "моя рпгшка.txt"
 
-    save.writelines(['1\n', '{0}\n'.format(Person.special), '0\n','{0}\n'.format(Person.level) ,'0\n', '500\n', '1\n', '0\n', Person.Weapon.name])
+    save.writelines(['1\n', '{0}\n'.format(Person.special), '0\n','{0}\n'.format(Person.level) ,'0\n', '50\n', '1\n', '0\n', Person.Weapon.name])
     save.close()
     slp(1)
     cls()
@@ -339,38 +361,15 @@ def market():
     print(Back.GREEN, Fore.BLACK, '============================')
 
 
+
     # Работа рынка
     ####################
-    def potion_more():
-        print(Back.RED, Fore.WHITE, '\nВы не можете хранить больше 9-ти зелий/сундуков/кристаллов одного вида!')
-        slp(3)
-        market()
-
-    # Пересохраение основного "save.txt"
-    def m_write_save():
-        save = open('System/save.txt', 'w')
-        save.write('1\n{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n{6}\{7}'.format(Person.special,Person.xp,Person.level,Person.Weapon.level,Person.coins,Person.crystals,Person.day,Person.Weapon.name))
-        save.close()
-
-    # Пересохраение инвентаря игрока (pack.txt)
-    def m_write_pack():
-        save_inventory = open('System/pack.txt', 'w')
-        save_inventory.seek(0)
-        save_inventory.write('{0}{1}{2}{3}'.format(Person.potion_pow, Person.potion_heal, Person.potion_mana, Person.pack_chest))
-        save_inventory.close()
-
     def m_buy(): # l_market = ["Зелье Силы", "Зелье Здоровья", "Зелье маны", "Сундук", "Кристалл"]
-        global x
-
         print(Back.BLACK, Fore.WHITE)
         cls()
         if market_choose == 'Зелье Силы':
             if Person.potion_pow >= 9:
-                print('\n\nВы не можете хранить больше 9-ти зелий одного вида!')
-                Person.coins += x
-                x = 0
-                input('\nНАЖМИТЕ ENTER, ЧТОБЫ ПРОДОЛЖИТЬ')
-                market()
+                potion_more(x)
             else:
                 print(Back.GREEN, Fore.BLACK, '\nПокупка совершена!')
                 slp(0.8)
@@ -381,11 +380,7 @@ def market():
 
         elif market_choose == 'Зелье Здоровья':
             if Person.potion_heal >= 9:
-                print('\n\nВы не можете хранить больше 9-ти зелий одного вида!')
-                Person.coins += x
-                x = 0
-                input('\nНАЖМИТЕ ENTER, ЧТОБЫ ПРОДОЛЖИТЬ')
-                market()
+                potion_more(x)
             else:
                 print(Back.GREEN, Fore.BLACK, '\nПокупка совершена!')
                 slp(0.8)
@@ -396,18 +391,14 @@ def market():
 
         elif market_choose == 'Зелье маны':
             if Person.special != "Маг":
-                print(Back.BLACK, Fore.WHITE)
+                print(Back.BLACK, Fore.WHITE, "\n")
                 print(Person.special,'не может покупать зелье маны!')
                 slp(3)
                 market()
 
             else:
                 if Person.potion_mana >= 9:
-                    print('\n\nВы не можете хранить больше 9-ти зелий одного вида!')
-                    Person.coins += x
-                    x = 0
-                    input('\nНАЖМИТЕ ENTER, ЧТОБЫ ПРОДОЛЖИТЬ')
-                    market()
+                    potion_more(x)
                 else:
                     print(Back.GREEN, Fore.BLACK, '\nПокупка совершена!')
                     slp(0.8)
@@ -418,11 +409,7 @@ def market():
 
         elif market_choose == 'Сундук':
             if Person.pack_chest >= 9:
-                print('\n\nВы не можете хранить больше 9-ти зелий одного вида!')
-                Person.coins += x
-                x = 0
-                input('\nНАЖМИТЕ ENTER, ЧТОБЫ ПРОДОЛЖИТЬ')
-                market()
+                potion_more(x)
             else:
                 print(Back.GREEN, Fore.BLACK, '\nПокупка совершена!')
                 slp(0.8)
@@ -433,11 +420,7 @@ def market():
 
         elif market_choose == 'Кристалл':
             if Person.crystals >= 9:
-                print('\n\nВы не можете хранить больше 9-ти зелий одного вида!')
-                Person.coins += x
-                x = 0
-                input('\nНАЖМИТЕ ENTER, ЧТОБЫ ПРОДОЛЖИТЬ')
-                market()
+                potion_more(x)
             else:
                 print(Back.GREEN, Fore.BLACK, '\nПокупка совершена!')
                 slp(0.8)
@@ -597,7 +580,6 @@ def market():
 
 
 
-
 # Недоделал
 # Сама игра
 
@@ -642,6 +624,7 @@ def dunge():
             print("#", end='')
             slp(0.6)
         slp(1)
+
 
 # Выбор данджа
 def go_dunge():

@@ -8,14 +8,6 @@ class Dunge:
     xp = 0
     difficulty = 0
 
-# Класс врагов
-class Enemy:
-    name = "None"
-    level = 0
-    damage = 2 + level
-    hp = 0
-    critical = damage * 1.5
-
 # Лес
 def forest():
     Dunge.name = "Лес"
