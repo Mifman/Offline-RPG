@@ -72,10 +72,12 @@ class Person:
     crystals = 1
     hp = 20 # Кол-во жизней
     hp_multiplier = hp + (level + 1) # Столько будет hp После повышения уровня
+
     # Зелья
     potion_pow = 0
     potion_heal = 0
     potion_mana = 0
+
     # Сундуки
     pack_chest = 0
     # Класс статистики (цифра 5 в меню)
