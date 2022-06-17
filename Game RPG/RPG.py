@@ -56,8 +56,8 @@ class Person:
     # Основной класс оружия игрока
     class Weapon:
         name = None
-        level = 0
-        power = 5 + level
+        level = 1 # Тот же, что и у самого персонажа
+        power = 5 + (level - 1)
         critical = power * 1.5
 
     name = None
@@ -103,11 +103,11 @@ class Market:
     # Переменная, позволяющая изменить генерацию ларьков (True - может/False - не может). По умолчанию False
     edit = False
     # Цена товара на рынке
-    price_0 = rdm.randint(3,50)
+    price_0 = rdm.randint(3,30)
     price_1 = rdm.randint(3,30)
     price_2 = rdm.randint(3,45)
     price_3 = rdm.randint(5,30)
-    price_4 = rdm.randint(3,35)
+    price_4 = rdm.randint(3,20)
 
 # Пересохраение основного "save.txt"
 def m_write_save():
@@ -336,11 +336,11 @@ def market():
         Market.stall_3 = rdm.choice(l_market)
         Market.stall_4 = rdm.choice(l_market)
         # Цены
-        Market.price_0 = rdm.randint(3, 50)
+        Market.price_0 = rdm.randint(3, 30)
         Market.price_1 = rdm.randint(3, 30)
         Market.price_2 = rdm.randint(3, 45)
         Market.price_3 = rdm.randint(5, 30)
-        Market.price_4 = rdm.randint(3, 35)
+        Market.price_4 = rdm.randint(3, 20)
 
     print(Back.GREEN, Fore.BLACK)
     print('  ============================')
@@ -776,6 +776,8 @@ elif Person.special == 'Маг\n':
     Person.special = 'Маг'
 elif Person.special == 'Броневик\n':
     Person.special = 'Броневик'
+
+Person.Weapon.level = Person.level
 
 ###########
 save.seek(0) # Сброс на начало файла
