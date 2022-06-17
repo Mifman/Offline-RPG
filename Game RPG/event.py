@@ -47,7 +47,7 @@ def kikimora():
 
 # Энт
 def ent():
-    Enemy.name = "Кикимора"
+    Enemy.name = "Энт"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 5)
     Enemy.loot = rdm.randint(0, 1)
 
