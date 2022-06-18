@@ -19,58 +19,59 @@ class Enemy:
 
 ##########################
 # Виды врагов
+# Порядок номеров миров (от лёгкого до самого сложного): 1-6
 
-# Гоблин
+# Гоблин (1-5)
 def goblin():
     Enemy.name = "Гоблин"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 2)
     Enemy.loot = rdm.randint(0, 1)
 
-# Орк
+# Орк (1-6)
 def ork():
     Enemy.name = "Орк"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 4)
     Enemy.damage = 1 + Enemy.level + rdm.randint(0, 2)
     Enemy.loot = rdm.randint(0, 1)
 
-# Паук
+# Паук (2-6)
 def spider():
     Enemy.name = "Паук"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 3)
     Enemy.hp = 4 + Enemy.level + rdm.randint(0, 2)
     Enemy.loot = 0
 
-# Кикимора
+# Кикимора (1-6)
 def kikimora():
     Enemy.name = "Кикимора"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 6)
     Enemy.loot = rdm.randint(0, 2)
 
-# Энт
+# Энт (1-6, кроме 2,4,5)
 def ent():
     Enemy.name = "Энт"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 5)
     Enemy.loot = rdm.randint(0, 1)
 
-# Кентавр
+# Кентавр (1-6, кроме 2,4,5)
 def kentavr():
     Enemy.name = "Кентавр"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 3)
     Enemy.loot = rdm.randint(0, 1)
 
-# Элементаль
+# Элементаль (2-6)
 def elemental():
     Enemy.name = "Элементаль"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 6)
     Enemy.loot = rdm.randint(0, 3)
 
-# Тролль
+# Тролль (1-6)
 def troll():
     Enemy.name = "Тролль"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 3)
     Enemy.loot = rdm.randint(0, 3)
 
-# Циклоп
+# Циклоп (3-6)
 def cyklop():
     Enemy.name = "Циклоп"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 5)
@@ -78,7 +79,7 @@ def cyklop():
     Enemy.damage = 1 + Enemy.level + rdm.randint(0, 2)
     Enemy.loot = rdm.randint(0, 2)
 
-# Демон
+# Демон (4-6)
 def demon():
     Enemy.name = "Демон"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 5)
@@ -86,33 +87,33 @@ def demon():
     Enemy.damage = 1 + Enemy.level + rdm.randint(0, 4)
     Enemy.loot = rdm.randint(0, 2)
 
-# Тэнгу (человек-ворон)
+# Тэнгу (человек-ворон) (1-6, кроме 2,4,5)
 def tengu():
     Enemy.name = "Тэнгу"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 5)
     Enemy.loot = rdm.randint(0, 3)
 
-# Горгона
+# Горгона (2-6)
 def gorgona():
     Enemy.name = "Горгона"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 5)
     Enemy.damage = 1 + Enemy.level + rdm.randint(0, 4)
     Enemy.loot = rdm.randint(0, 1)
 
-# Скелет
+# Скелет (2,4,5)
 def skelet():
     Enemy.name = "Скелет"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 3)
     Enemy.loot = rdm.randint(0, 1)
 
-# Оборотень
+# Оборотень (1-6, кроме 4,5)
 def oboroten():
     Enemy.name = "Оборотень"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 3)
     Enemy.hp = 4 + Enemy.level + rdm.randint(0, 4)
     Enemy.loot = rdm.randint(0, 3)
 
-# Лич
+# Лич (4,5)
 def lich():
     Enemy.name = "Лич"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 5)
@@ -120,14 +121,14 @@ def lich():
     Enemy.damage = 1 + Enemy.level + rdm.randint(0, 6)
     Enemy.loot = rdm.randint(0, 4)
 
-# Зомби
+# Зомби (2,4,5)
 def zombi():
     Enemy.name = "Зомби"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 3)
     Enemy.hp = 4 + Enemy.level + rdm.randint(0, 3)
     Enemy.loot = rdm.randint(0, 1)
 
-# Персонаж (другой "игрок")
+# Персонаж (другой "игрок") (1-6)
 name_list = ["Progger", "dAlEk456", "Footman", "KoLo40k", "Киргиз", "СвяТой_ТапоК", "DeMoN", "Lemon4ik", "MirrorX", "4EJIoВek", "Joker", "Шалтай", "NoName", "Chilly", "FRENK", "Фант0м", "GONZO", "ШапоКJLЯC", "Succubus", "СКАЛА", "dazz", "ВАШ Доктор", "Тень", "MC", "ZOrg", "Агент007", "Лб_Чипс", "Сухарик", "КR0ш", "ArTemK", "Vlad1337", "Kefir", "Лёха", "Сергей", "Рэйзор БезУмНыЙ", "КрипоНуб", "Who Touch My Spagetti?"]
 def player():
     Enemy.name = "Персонаж: " + rdm.choice(name_list)
