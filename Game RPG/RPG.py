@@ -70,16 +70,19 @@ class Person:
     current_dunge = None # Переменная, определяющая в каком дандже сейчас находится игрок
     coins = 50
     crystals = 1
+
+    # Для битв
     hp = 20 # Кол-во жизней
+    stamina = hp / 2 # Выносливость персонажа
     hp_multiplier = hp + (level + 1) # Столько будет hp После повышения уровня
 
     # Зелья
     potion_pow = 0
     potion_heal = 0
     potion_mana = 0
-
     # Сундуки
     pack_chest = 0
+
     # Класс статистики (цифра 5 в меню)
     class Stats():
         coins_up = 0  # Всего заработано монет

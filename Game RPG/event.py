@@ -7,12 +7,13 @@ from colorama import init
 from colorama import Fore, Back, Style
 init()
 
-# Класс врагов (Имя, его уровень, урон (зависит от уровня), жизней (также зависит от уровня), критический урон, кол-во выпадающего лута)
+# Класс врагов (Имя, его уровень, урон (зависит от уровня), жизней (также зависит от уровня), выносливость, критический урон, кол-во выпадающего лута)
 class Enemy:
     name = "None"
     level = 0
     damage = 1 + level
     hp = 4 + level
+    stamina = hp / 2
     critical = damage * 1.5
     loot = 0
 
@@ -133,7 +134,7 @@ name_list = ["Progger", "dAlEk456", "Footman", "KoLo40k", "Киргиз", "Св�
 def player():
     Enemy.name = "Персонаж: " + rdm.choice(name_list)
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 3)
-    Enemy.hp = 4 + Enemy.level + rdm.randint(0, 3)
+    Enemy.hp = 4 + Enemy.level + rdm.randint(3, 9)
     Enemy.damage = 1 + Enemy.level + rdm.randint(0, 3)
     Enemy.loot = rdm.randint(0, 3)
 
@@ -144,7 +145,7 @@ l_list = ["Монет", "Зелий Силы", "Зелий Здоровья", "�
 l_name = None # Название лута
 l_amount = 0
 
-def set_loot():
+def get_loot():
     if l_name == l_list[0]: # coins
         g.Person.coins += l_amount
 
@@ -167,7 +168,7 @@ def set_loot():
         g.Person.crystals += l_amount
 
     print(Back.WHITE, Fore.BLACK)
-    print("\n", g.Person.name, " Получает ", l_amount, " ", l_name, "!", sep='')
+    print("\n ", g.Person.name, " Получает ", l_amount, " ", l_name, "!", sep='')
     slp(3.3)
 
 
@@ -175,7 +176,7 @@ def set_loot():
 
 ##########################
 # Получение лута
-def get_loot():
+def set_loot():
     ######################
     ### Рандомайзер
 
@@ -209,3 +210,7 @@ def get_loot():
         l_amount = rdm.randint(1, 2)
 
     ######################
+
+# Битва
+def fight():
+    print(Back.RED, Fore.BLACK)
