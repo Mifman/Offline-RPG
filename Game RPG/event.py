@@ -20,6 +20,11 @@ class Enemy:
 
 ##########################
 # Виды врагов
+enemy_list = ["Гоблин", "Орк", "Паук", "Кикимора",
+              "Энт", "Кентавр", "Элементаль", "Тролль",
+              "Циклоп", "Демон", "Тэнгу", "Горгона", "Скелет"
+                 "Оборотень", "Лич", "Зомби", "Персонаж"]
+
 # Порядок номеров миров (от лёгкого до самого сложного): 1-6
 
 # Гоблин (1-5)
@@ -130,18 +135,24 @@ def zombi():
     Enemy.loot = rdm.randint(0, 1)
 
 # Персонаж (другой "игрок") (1-6)
-name_list = ["Progger", "dAlEk456", "Footman", "KoLo40k", "Киргиз", "СвяТой_ТапоК", "DeMoN", "Lemon4ik", "MirrorX", "4EJIoВek", "Joker", "Шалтай", "NoName", "Chilly", "FRENK", "Фант0м", "GONZO", "ШапоКJLЯC", "Succubus", "СКАЛА", "dazz", "ВАШ Доктор", "Тень", "MC", "ZOrg", "Агент007", "Лб_Чипс", "Сухарик", "КR0ш", "ArTemK", "Vlad1337", "Kefir", "Лёха", "Сергей", "Рэйзор БезУмНыЙ", "КрипоНуб", "Who Touch My Spagetti?"]
+name_list = ["Progger", "dAlEk456", "Footman", "KoLo40k", "Киргиз", "СвяТой_ТапоК",
+             "DeMoN", "Lemon4ik", "MirrorX", "4EJIoВek", "Joker", "Шалтай", "NoName",
+             "Chilly", "FRENK", "Фант0м", "GONZO", "ШапоКJLЯC", "Succubus", "СКАЛА",
+             "dazz", "ВАШ Доктор", "Тень", "MC", "ZOrg", "Агент007", "Лб_Чипс", "Сухарик",
+             "КR0ш", "ArTemK", "Vlad1337", "Kefir", "Лёха", "Сергей", "Рэйзор БезУмНыЙ",
+             "КрипоНуб", "Who Touch My Spagetti?"]
 def player():
     Enemy.name = "Персонаж: " + rdm.choice(name_list)
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 3)
     Enemy.hp = 4 + Enemy.level + rdm.randint(3, 9)
     Enemy.damage = 1 + Enemy.level + rdm.randint(0, 3)
-    Enemy.loot = rdm.randint(0, 3)
+    Enemy.loot = rdm.randint(1, 3)
 
 ##########################
 ### ПЕРЕМЕННЫЕ
 # Виды лута
-l_list = ["Монет", "Зелий Силы", "Зелий Здоровья", "Зелий Маны", "Сундук(-а)", "Кристалл(-ов)"] # Лист со всеми видами лутов (вставляется в конце предложения)
+l_list = ["Монет", "Зелий Силы", "Зелий Здоровья",
+          "Зелий Маны", "Сундук(-а)", "Кристалл(-ов)"] # Лист со всеми видами лутов (вставляется в конце предложения)
 l_name = None # Название лута
 l_amount = 0
 
@@ -210,6 +221,50 @@ def set_loot():
         l_amount = rdm.randint(1, 2)
 
     ######################
+
+# Выбор попавшегося врага
+#enemy_list = ["Гоблин", "Орк", "Паук", "Кикимора","Энт", "Кентавр", "Элементаль", "Тролль","Циклоп", "Демон", "Тэнгу", "Горгона", "Скелет","Оборотень", "Лич", "Зомби", "Персонаж"]
+def enemy_choose():
+    rand_enemy = rdm.choice(enemy_list)
+    if rand_enemy == "Гоблин":
+        goblin()
+    elif rand_enemy == "Орк":
+        ork()
+    elif rand_enemy == "Паук":
+        spider()
+    elif rand_enemy == "Кикимора":
+        kikimora()
+    elif rand_enemy == "Энт":
+        ent()
+    elif rand_enemy == "Кентавр":
+        kentavr()
+    elif rand_enemy == "Элементаль":
+        elemental()
+    elif rand_enemy == "Тролль":
+        troll()
+    elif rand_enemy == "Циклоп":
+        cyklop()
+    elif rand_enemy == "Демон":
+        demon()
+    elif rand_enemy == "Тэнгу":
+        tengu()
+    elif rand_enemy == "Горгона":
+        gorgona()
+    elif rand_enemy == "Скелет":
+        skelet()
+    elif rand_enemy == "Оборотень":
+        oboroten()
+    elif rand_enemy == "Лич":
+        lich()
+    elif rand_enemy == "Зомби":
+        zombi()
+    elif rand_enemy == "Персонаж":
+        player()
+
+    # Недоделал
+    # Определение данджа
+    if d.Dunge.name == "Лес":
+        print(Back.RED,Fore.BLACK)
 
 # Битва
 def fight():
