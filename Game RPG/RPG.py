@@ -9,6 +9,13 @@ except ModuleNotFoundError:
     print('ОШИБКА! В КОРНЕВОМ КАТАЛОГЕ НЕ НАЙДЕН ФАЙЛ "dunges.py"')
     slp(99999)
 
+# Проверка наличия event.py
+try:
+    import event as e # файл event.py
+except ModuleNotFoundError:
+    print('ОШИБКА! В КОРНЕВОМ КАТАЛОГЕ НЕ НАЙДЕН ФАЙЛ "event.py"')
+    slp(99999)
+
 from colorama import init
 from colorama import Fore, Back, Style
 init()
@@ -59,8 +66,10 @@ class Person:
         level = 0
         multiplier = level * 9  # Множитель уровня (именно столько нужно опыта для достижения нового уровня)
         # ВНИМАНИЕ! Опыт у оружия и персонажа общий!! При достижении multiplier опыт не сбрасывается!!!
-        power = 5 + (level - 1)
+        power = 5 + (level)
+        power_default = 5 + (level)
         critical = power * 1.5
+        critical_default = power * 1.5
 
     name = None
     special = None
@@ -75,7 +84,11 @@ class Person:
 
     # Для битв
     hp = 18 + (level + 1) # Кол-во жизней
-    stamina = hp / 2 # Выносливость персонажа
+    hp_default = 18 + (level + 1) # По умолчанию
+    stamina = hp / 3 # Выносливость персонажа
+    stamina_default = hp / 3 # По умолчанию
+    mana = 10 + level # Если класс персонажа Маг, данная переменная играет роль, в остальном нет
+    mana_default = 10 + level # По умолчанию
 
     # Зелья
     potion_pow = 0
@@ -774,14 +787,19 @@ save.readline()
 Person.special = str(save.readline())
 if Person.special == 'Мечник\n':
     Person.special = 'Мечник'
+    Person.Weapon.critical *= 1.2
+    Person.hp *= 0.9
 elif Person.special == 'Лучник\n':
     Person.special = 'Лучник'
+    Person.Weapon.power *= 1.12
+    Person.hp *= 0.89
 elif Person.special == 'Маг\n':
     Person.special = 'Маг'
+    Person.hp *= 0.75
 elif Person.special == 'Броневик\n':
     Person.special = 'Броневик'
-
-Person.Weapon.level = Person.level
+    Person.hp *= 1.2
+    Person.Weapon.power *= 0.8
 
 ###########
 save.seek(0) # Сброс на начало файла
