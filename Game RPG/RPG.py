@@ -901,7 +901,7 @@ name_list = ["Progger", "dAlEk456", "Footman", "KoLo40k", "Киргиз", "Св�
              "КR0ш", "ArTemK", "Vlad1337", "Kefir", "Лёха", "Сергей", "Рэйзор БезУмНыЙ",
              "КрипоНуб", "Who Touch My Spagetti?"]
 def player():
-    Enemy.name = "Персонаж: " + rdm.choice(name_list)
+    Enemy.name = "Персонаж " + rdm.choice(name_list)
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 3)
     Enemy.hp = 4 + Enemy.level + rdm.randint(3, 9)
     Enemy.damage = 1 + Enemy.level + rdm.randint(0, 3)
@@ -1196,9 +1196,6 @@ def fight(v1,v2,v3):
     use_mana2 = False # Маг использовал увеличение здоровья ложь
 
     print(Back.RED, Fore.BLACK)
-    enemy_choose(this_enemy)
-    Enemy.hp = Enemy.hp_default
-    Enemy.stamina = Enemy.stamina_default
     slp(1)
     print("\nОбнаружен противник!")
     slp(3)
@@ -1688,6 +1685,7 @@ def dunge():
 
     # Цикл, длина которого определяется длиной данджа
     for lm in range(d.Dunge.level_max):
+        enemy_choose(this_enemy)
         cls()
         print("\n\n")
         slp(1)
