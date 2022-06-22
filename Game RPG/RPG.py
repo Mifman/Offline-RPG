@@ -431,7 +431,7 @@ def menu():
     else:
         print(Back.RED, Fore.BLACK)
         print("\nВведите коректные данные!")
-        slp(3)
+        slp(2.3)
         menu()
 
 # Рынок
