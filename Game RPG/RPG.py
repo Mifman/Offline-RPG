@@ -1558,6 +1558,11 @@ def fight(v1,v2,v3):
                         slp(0.9)
                         input("\nENTER чтобы продолжить")
 
+                else:
+                    print("\nНе удалось пробить защиту!")
+                    slp(3)
+                    input("\nENTER чтобы продолжить")
+
             # Если защита и защита
             if slot_fight[z] == "Защита" and slot_fight_en[z] == "Защита":
                 print("\nВы оба решили защититься")
