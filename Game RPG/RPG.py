@@ -301,7 +301,7 @@ def menu():
         print('--------------------------')
         print('    Характеристика оружия:\n')
         print('Название:', Person.Weapon.name)
-        print('Уровень:', Person.Weapon.level)
+        print('Уровень:', Person.Weapon.level_w)
         print('Сила:', Person.Weapon.power)
         print('Критический урон:', Person.Weapon.critical)
         print(Back.GREEN, Fore.BLACK)
@@ -1767,9 +1767,9 @@ def dunge():
         print(Person.name, " получил новый уровень! (",Person.level,")", sep='')
 
     if Person.xp >= Person.Weapon.multiplier:
-        Person.Weapon.level += 1
+        Person.Weapon.level_w += 1
         print("")
-        print("Оружие ", Person.name, " получило новый уровень! (", Person.Weapon.level, ")", sep='')
+        print("Оружие ", Person.name, " получило новый уровень! (", Person.Weapon.level_w, ")", sep='')
 
     m_write_save()
     m_write_pack()
