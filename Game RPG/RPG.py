@@ -2009,7 +2009,7 @@ save.seek(0)
 ###########
 # Загрузка дней, проведённых за игрой
 ###########
-for i in range(6):
+for i in range(7):
     save.readline()
 Person.day = int(save.readline())
 save.seek(0)
