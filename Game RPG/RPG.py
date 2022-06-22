@@ -1765,11 +1765,24 @@ def dunge():
         Person.xp -= Person.multiplier
         print("")
         print(Person.name, " получил новый уровень! (",Person.level,")", sep='')
+        Person.level = int(save.readline())
+        Person.hp = 18 + (Person.level + 1)
+        Person.hp_default = 18 + (Person.level + 1)
+        Person.stamina = Person.hp / 3
+        Person.stamina_default = Person.hp / 3
+        Person.multiplier = Person.level * 12
+        Person.mana = 10 + Person.level
+        Person.mana_default = 10 + Person.level
 
     if Person.xp >= Person.Weapon.multiplier:
         Person.Weapon.level_w += 1
         print("")
         print("Оружие ", Person.name, " получило новый уровень! (", Person.Weapon.level_w, ")", sep='')
+        Person.Weapon.level_w = int(save.readline())
+        Person.Weapon.power = 5 + Person.Weapon.level_w
+        Person.Weapon.power_default = 5 + Person.Weapon.level_w
+        Person.Weapon.critical = Person.Weapon.power * 1.5
+        Person.Weapon.multiplier = Person.Weapon.level_w * 9
 
     m_write_save()
     m_write_pack()
@@ -1954,6 +1967,8 @@ for i in range(3):
 Person.level = int(save.readline())
 Person.hp = 18 + (Person.level + 1)
 Person.hp_default = 18 + (Person.level + 1)
+Person.stamina = Person.hp / 3
+Person.stamina_default = Person.hp / 3
 Person.multiplier = Person.level * 12
 Person.mana = 10 + Person.level
 Person.mana_default = 10 + Person.level
