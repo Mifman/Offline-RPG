@@ -248,7 +248,7 @@ if save.read(1) == '0':
     save = open('System/save.txt', 'w')
     # подробнее есть в файле "моя рпгшка.txt"
 
-    save.writelines(['1\n', '{0}\n'.format(Person.special), '0\n','{0}\n'.format(Person.level) ,'0\n', '50\n', '1\n', '0\n', Person.Weapon.name, '0\n', '0\n', '0'])
+    save.writelines(['1\n', '{0}\n'.format(Person.special), '0\n','{0}\n'.format(Person.level) ,'0\n', '50\n', '1\n', '0\n', Person.Weapon.name, '\n0\n', '0\n', '0'])
     save.close()
     slp(1)
     cls()
@@ -2015,6 +2015,7 @@ for i in range(10):
 Person.Stats.crystals_up = int(save.readline())
 
 # Всего открытых сундуков
+save.seek(0)
 for i in range(11):
     save.readline()
 Person.Stats.chests_open = int(save.readline())
