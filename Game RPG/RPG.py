@@ -1211,6 +1211,10 @@ def fight(v1,v2,v3):
         if len(slot_fight_en) >= 2:
             slot_fight_en = []
 
+        # Ограничение на макс. кол-во выносливости
+        if Person.stamina > Person.stamina_default:
+            Person.stamina = Person.stamina_default
+
         Enemy.hp = round(Enemy.hp, 3)
         Person.hp = round(Person.hp, 3)
         Enemy.stamina = round(Enemy.stamina, 3)
