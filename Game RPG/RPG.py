@@ -905,6 +905,7 @@ def player():
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 3)
     Enemy.hp = 4 + Enemy.level + rdm.randint(3, 9)
     Enemy.damage = 1 + Enemy.level + rdm.randint(0, 3)
+    Enemy.stamina = Enemy.stamina_default
     Enemy.loot = rdm.randint(1, 3)
 
 ##########################
