@@ -327,9 +327,66 @@ def menu():
         print(Back.GREEN, Fore.BLACK)
         print('============================\n')
         print(Fore.BLACK, Back.WHITE)
-        choose = input('НАЖМИТЕ ENTER ЧТОБЫ ВЫЙТИ В МЕНЮ')
+        choose = input('1. Открыть сундук\n'
+                       'ENTER - ВЫЙТИ В МЕНЮ\n'
+                       '\n'
+                       'Ваш выбор: ==>')
         print(Back.RESET, Fore.RESET)
-        menu()
+        if choose == "1":
+            if Person.pack_chest > 0:
+                Person.pack_chest -= 1
+                rand_open_chest = rdm.randint(0,5)
+
+                # Открытие сундука
+                for i in range(5):
+                    cls()
+                    t = "."
+                    print("\nОткрывается сундук", t * i, sep='')
+                    slp(0.5)
+
+                if rand_open_chest <= 3:
+                    print(Back.WHITE, Fore.BLACK)
+                    print("\nВ сундуке пусто...")
+                    slp(3.5)
+                elif rand_open_chest == 4:
+                    rand_coins_amount = rdm.randint(1,4)
+                    print(Back.GREEN, Fore.BLACK)
+                    print("\nВ сундуке найдено",rand_coins_amount, "монет!")
+                    Person.coins += rand_coins_amount
+                    Person.Stats.coins_up += rand_coins_amount
+                    slp(3.5)
+                elif rand_open_chest == 5:
+                    print(Back.GREEN, Fore.BLACK)
+                    rand_potion = rdm.randint(0,2)
+                    if rand_potion == 0:
+                        rand_potion = "Силы"
+                        Person.potion_pow += 1
+                    elif rand_potion == 1:
+                        rand_potion = "Здоровья"
+                        Person.potion_heal += 1
+                    elif rand_potion == 2:
+                        if Person.special != "Маг":
+                            rand_potion = "Здоровья"
+                            Person.potion_heal += 1
+                        else:
+                            rand_potion = "Маны"
+                            Person.potion_mana += 1
+
+                    print("\nВ сундуке найдено зелье", rand_potion)
+                    slp(3.5)
+
+                m_write_save()
+                m_write_pack()
+                menu()
+
+            else:
+                print(Back.WHITE, Fore.BLACK)
+                print("\nУ вас нет сундуков!")
+                slp(3)
+                menu()
+
+        else:
+            menu()
 
     elif choose == '2':
         go_dunge()
@@ -860,6 +917,7 @@ def get_loot(l_name, l_list,l_amount):
 
         if l_name == l_list[0]: # coins
             Person.coins += l_amount
+            Person.Stats.coins_up += l_amount
 
         elif l_name == l_list[1]: # pow
             Person.potion_pow += l_amount
@@ -878,6 +936,7 @@ def get_loot(l_name, l_list,l_amount):
 
         elif l_name == l_list[5]: # crystal
             Person.crystals += l_amount
+            Person.Stats.crystals_up += l_amount
 
         print(Back.WHITE, Fore.BLACK)
         print("\n ", Person.name, " Получает ", l_amount, " ", l_name, "!", sep='')
@@ -1626,6 +1685,8 @@ def dunge():
     Person.Weapon.critical = Person.Weapon.critical_default
     Person.stamina = Person.stamina_default
     Person.mana = Person.mana_default
+
+    Person.day += 1
     
     Enemy.hp = Enemy.hp_default
     Enemy.stamina = Enemy.stamina_default
