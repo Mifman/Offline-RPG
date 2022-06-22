@@ -138,7 +138,7 @@ class Market:
 # Пересохраение основного "save.txt"
 def m_write_save():
     save = open('System/save.txt', 'w')
-    save.write('1\n{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n{6}\n{7}'.format(Person.special,Person.xp,Person.level,Person.Weapon.level,Person.coins,Person.crystals,Person.day,Person.Weapon.name))
+    save.write('1\n{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n{6}\n{7}\n{8}\n{9}\n{10}'.format(Person.special,Person.xp,Person.level,Person.Weapon.level,Person.coins,Person.crystals,Person.day,Person.Weapon.name,Person.Stats.coins_up,Person.Stats.crystals_up,Person.Stats.chests_open))
     save.close()
 
 # Пересохраение инвентаря игрока (pack.txt)
@@ -248,7 +248,7 @@ if save.read(1) == '0':
     save = open('System/save.txt', 'w')
     # подробнее есть в файле "моя рпгшка.txt"
 
-    save.writelines(['1\n', '{0}\n'.format(Person.special), '0\n','{0}\n'.format(Person.level) ,'0\n', '50\n', '1\n', '0\n', Person.Weapon.name])
+    save.writelines(['1\n', '{0}\n'.format(Person.special), '0\n','{0}\n'.format(Person.level) ,'0\n', '50\n', '1\n', '0\n', Person.Weapon.name, '0\n', '0\n', '0'])
     save.close()
     slp(1)
     cls()
@@ -2000,6 +2000,25 @@ elif Person.Weapon.name == "Магическая трость\n":
 elif Person.Weapon.name == "Щит\n":
     Person.Weapon.name = "Щит"
 ###########
+# Загрузка статистики
+###########
+save.seek(0)
+# заработано монет
+for i in range(9):
+    save.readline()
+Person.Stats.coins_up = int(save.readline())
+
+# Заработано кристаллов
+save.seek(0)
+for i in range(10):
+    save.readline()
+Person.Stats.crystals_up = int(save.readline())
+
+# Всего открытых сундуков
+for i in range(11):
+    save.readline()
+Person.Stats.chests_open = int(save.readline())
+
 save.close() # Закрытие сохранения
 
 # Загрузка инвентаря
