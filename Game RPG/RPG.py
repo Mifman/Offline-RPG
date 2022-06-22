@@ -1197,6 +1197,8 @@ def fight(v1,v2,v3):
 
     print(Back.RED, Fore.BLACK)
     enemy_choose(this_enemy)
+    Enemy.hp = Enemy.hp_default
+    Enemy.stamina = Enemy.stamina_default
     slp(1)
     print("\nОбнаружен противник!")
     slp(3)
