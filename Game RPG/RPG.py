@@ -373,8 +373,9 @@ def menu():
                             Person.potion_mana += 1
 
                     print("\nВ сундуке найдено зелье", rand_potion)
-                    slp(3.5)
+                    slp(4)
 
+                Person.Stats.chests_open += 1
                 m_write_save()
                 m_write_pack()
                 menu()
@@ -393,6 +394,39 @@ def menu():
 
     elif choose == '3':
         market()
+
+    elif choose == '4':
+        cls()
+        print("\nАрена Закрыта.")
+        slp(3)
+        menu()
+
+    elif choose == '5':
+        cls()
+        print(Back.WHITE, Fore.BLACK)
+        print(Person.name)
+        print("\nОпыт:", Person.xp)
+        print("Всего заработано монет:", Person.Stats.coins_up)
+        print("Всего заработано кристаллов:", Person.Stats.crystals_up)
+        print("Игровых дней проведено:", Person.day)
+        print("Всего открытых сундуков:", Person.Stats.chests_open)
+        input("\nНажмите ENTER для выхода в МЕНЮ")
+        menu()
+
+    elif choose == '6':
+        cls()
+        print(Back.CYAN, Fore.BLACK)
+        print("Репозиторий игры (открытый код): https://github.com/Mifman/Offline-RPG")
+        print("Руководства и обновления: https://github.com/Mifman/Offline-RPG/discussions")
+        print("Разработчик: Mifman")
+        print("Контакт: https://vk.com/mifman")
+        input("\nНажмите ENTER для выхода в МЕНЮ")
+        menu()
+
+
+    elif choose == '7':
+        m_write_pack()
+        m_write_save()
 
 # Рынок
 def market():
