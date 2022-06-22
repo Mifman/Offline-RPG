@@ -428,6 +428,12 @@ def menu():
         m_write_pack()
         m_write_save()
 
+    else:
+        print(Back.RED, Fore.BLACK)
+        print("\nВведите коректные данные!")
+        slp(3)
+        menu()
+
 # Рынок
 def market():
     cls()
