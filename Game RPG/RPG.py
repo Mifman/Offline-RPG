@@ -1656,6 +1656,17 @@ def fight(v1,v2,v3):
                 input("\nENTER чтобы продолжить")
                 Enemy.hp -= rand_hit
 
+            # Если защита и отдых
+            elif slot_fight[z] == "Защита" and slot_fight_en[z] == "Отдых":
+                print(Person.name,"Бесполезно защитился")
+                slp(2)
+                input("\nENTER чтобы продолжить")
+
+                Enemy.stamina += round(Enemy.stamina_default, 3)
+                print("\n", Enemy.name, "решил восстановить выносливость")
+                slp(3)
+
+
 
 # Вход в дандж и само путешествие
 def dunge():
