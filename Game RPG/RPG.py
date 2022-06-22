@@ -1989,6 +1989,7 @@ for i in range(4):
 Person.Weapon.level_w = int(save.readline())
 Person.Weapon.power = 5 + Person.Weapon.level_w
 Person.Weapon.power_default = 5 + Person.Weapon.level_w
+Person.Weapon.critical = Person.Weapon.power * 1.5
 Person.Weapon.multiplier = Person.Weapon.level_w * 9
 save.seek(0)
 ###########
