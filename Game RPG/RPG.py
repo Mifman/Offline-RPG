@@ -1588,7 +1588,6 @@ def fight(v1,v2,v3):
             elif slot_fight[z] == "Пить зелье" and (slot_fight_en[z] == "Защита" or slot_fight_en[z] == "Отдых"):
                 # Для персонажа игрока
                 if pot_in == "1":
-                    Person.potion_pow -= 1
                     Person.Weapon.power += round(Person.Weapon.power_default * 0.3, 3)
                     print(Back.GREEN, Fore.BLACK)
                     print("\nИспользовано Зелье Силы! (+", round(Person.Weapon.power_default * 0.3, 3), " урона)", sep='')
@@ -1597,7 +1596,6 @@ def fight(v1,v2,v3):
                     pot = True
 
                 elif pot_in == "2":
-                    Person.potion_heal -= 1
                     Person.hp += round(Person.hp_default * 0.3, 3)
                     print(Back.GREEN, Fore.BLACK)
                     print("\nИспользовано Зелье Здоровья! (+", round(Person.hp_default * 0.3, 3), " ХП)", sep='')
@@ -1606,7 +1604,6 @@ def fight(v1,v2,v3):
                     pot = True
 
                 elif pot_in == "3":
-                    Person.potion_mana -= 1
                     Person.mana += round(Person.mana_default * 0.3, 3)
                     print(Back.GREEN, Fore.BLACK)
                     print("\nИспользовано Зелье Маны! (+", round(Person.mana_default * 0.3, 3), " маны)", sep='')
