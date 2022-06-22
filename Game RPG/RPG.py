@@ -1952,6 +1952,11 @@ save.seek(0)
 for i in range(3):
     save.readline()
 Person.level = int(save.readline())
+Person.hp = 18 + (Person.level + 1)
+Person.hp_default = 18 + (Person.level + 1)
+Person.multiplier = Person.level * 12
+Person.mana = 10 + Person.level
+Person.mana_default = 10 + Person.level
 
 if Person.level > 9 and Person.level < 30:
     Person.can_dunge = 1
