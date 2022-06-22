@@ -72,11 +72,11 @@ class Person:
     # Основной класс оружия игрока
     class Weapon:
         name = None
-        level = 0
-        multiplier = level * 9  # Множитель уровня (именно столько нужно опыта для достижения нового уровня)
+        level_w = 0
+        multiplier = level_w * 9  # Множитель уровня (именно столько нужно опыта для достижения нового уровня)
         # ВНИМАНИЕ! Опыт у оружия и персонажа общий!! При достижении multiplier опыт не сбрасывается!!!
-        power = 5 + (level)
-        power_default = 5 + (level)
+        power = 5 + (level_w)
+        power_default = 5 + (level_w)
         critical = power * 1.5
         critical_default = power * 1.5
 
@@ -138,7 +138,7 @@ class Market:
 # Пересохраение основного "save.txt"
 def m_write_save():
     save = open('System/save.txt', 'w')
-    save.write('1\n{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n{6}\n{7}\n{8}\n{9}\n{10}'.format(Person.special,Person.xp,Person.level,Person.Weapon.level,Person.coins,Person.crystals,Person.day,Person.Weapon.name,Person.Stats.coins_up,Person.Stats.crystals_up,Person.Stats.chests_open))
+    save.write('1\n{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n{6}\n{7}\n{8}\n{9}\n{10}'.format(Person.special,Person.xp,Person.level,Person.Weapon.level_w,Person.coins,Person.crystals,Person.day,Person.Weapon.name,Person.Stats.coins_up,Person.Stats.crystals_up,Person.Stats.chests_open))
     save.close()
 
 # Пересохраение инвентаря игрока (pack.txt)
@@ -1981,7 +1981,7 @@ save.seek(0)
 # Загрузка уровня оружия
 for i in range(4):
     save.readline()
-Person.Weapon.level = int(save.readline())
+Person.Weapon.level_w = int(save.readline())
 save.seek(0)
 ###########
 # Загрузка дней, проведённых за игрой
