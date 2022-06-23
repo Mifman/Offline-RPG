@@ -6,7 +6,7 @@ class Dunge:
     level = 0
     level_max = 0
     xp = 0
-    difficulty = 0
+    difficulty = 2
 
 # Лес
 def forest():
@@ -14,7 +14,7 @@ def forest():
     Dunge.level = 0
     Dunge.level_max = rdm.randint(3,5)
     Dunge.xp = rdm.randint(5,10) / 1.5
-    Dunge.difficulty = rdm.randint(0,1)
+    Dunge.difficulty = rdm.randint(2,4)
 
 # Подземелье
 def dungeon():
@@ -22,7 +22,7 @@ def dungeon():
     Dunge.level = 0
     Dunge.level_max = rdm.randint(3,7)
     Dunge.xp = rdm.randint(8,18) / 1.5
-    Dunge.difficulty = rdm.randint(2,3)
+    Dunge.difficulty = rdm.randint(3,6)
 
 # Густой лес
 def dense_forest():
@@ -30,7 +30,7 @@ def dense_forest():
     Dunge.level = 0
     Dunge.level_max = rdm.randint(5,9)
     Dunge.xp = rdm.randint(10, 20) / 1.5
-    Dunge.difficulty = rdm.randint(4,5)
+    Dunge.difficulty = rdm.randint(5,9)
 
 # Заброшенный замок
 def castle():
@@ -38,7 +38,7 @@ def castle():
     Dunge.level = 0
     Dunge.level_max = rdm.randint(5,11)
     Dunge.xp = rdm.randint(18, 28) / 1.5
-    Dunge.difficulty = rdm.randint(6,7)
+    Dunge.difficulty = rdm.randint(8,11)
 
 # Супер-Подземелье
 def super_dungeon():
@@ -46,7 +46,7 @@ def super_dungeon():
     Dunge.level = 0
     Dunge.level_max = rdm.randint(7,14)
     Dunge.xp = rdm.randint(25, 31) / 1.5
-    Dunge.difficulty = rdm.randint(8,9)
+    Dunge.difficulty = rdm.randint(10,14)
 
 # Изумрудный лес
 def emerald_forest():
@@ -54,4 +54,4 @@ def emerald_forest():
     Dunge.level = 0
     Dunge.level_max = rdm.randint(8,17)
     Dunge.xp = rdm.randint(30, 37) / 1.5
-    Dunge.difficulty = 10
+    Dunge.difficulty = rdm.randint(13,16)

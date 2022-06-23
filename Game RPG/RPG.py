@@ -112,6 +112,30 @@ class Person:
     mana = 10 + level  # Если класс персонажа Маг, данная переменная играет роль, в остальном нет
     mana_default = 10 + level  # По умолчанию
 
+    # Достижения
+    ach_0 = "Не выполнено" # Пройдите всё обучение (пометка: необходимо выполнить ни разу не закрыв игру)
+    ach_1 = "Не выполнено" # Сходите первый раз в дандж
+    ach_2 = "Не выполнено" # Уничтожьте первого врага
+    ach_3 = "Не выполнено" # Получите 2 уровень персонажа
+    ach_4 = "Не выполнено" # Получите 10 уровень персонажа
+    ach_5 = "Не выполнено" # Сходите в дандж "Подземелье"
+    ach_6 = "Не выполнено" # Получите 30 уровень
+    ach_7 = "Не выполнено" # Получите 40 уровень
+    ach_8 = "Не выполнено" # Получите 50 уровень
+    ach_9 = "Не выполнено" # Получите 60 уровень
+    # Идёт по порядку достижений
+    a_0 = 0
+    a_1 = False
+    a_2 = False
+    a_3 = False
+    a_4 = False
+    a_5 = False
+    a_6 = False
+    a_7 = False
+    a_8 = False
+    a_9 = False
+
+
     # Зелья
     potion_pow = 0
     potion_heal = 0
@@ -169,6 +193,14 @@ def m_write_pack():
         '{0}{1}{2}{3}'.format(Person.potion_pow, Person.potion_heal, Person.potion_mana, Person.pack_chest))
     save_inventory.close()
 
+# Пересохраение достижений (achievements.txt)
+def m_write_achievements():
+    achievements = open('System/achievements.txt', 'w')
+    achievements.seek(0)
+    achievements.write(
+        '{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n{6}\n{7}\n{8}\n{9}'.format(Person.ach_0, Person.ach_1, Person.ach_2, Person.ach_3, Person.ach_4, Person.ach_5, Person.ach_6, Person.ach_7, Person.ach_8, Person.ach_9))
+    achievements.close()
+
 
 # Проверка целостности файлов
 
@@ -182,6 +214,11 @@ def reset_game():
         pack = open('System/pack.txt', 'w')
         pack.write('0000')
         pack.close()
+
+        achievements = open('System/achievements.txt', 'w')
+        achievements.write('Не выполнено\nНе выполнено\nНе выполнено\nНе выполнено\nНе выполнено\nНе выполнено\n'
+                           'Не выполнено\nНе выполнено\nНе выполнено\nНе выполнено') # Достижения
+        achievements.close()
 
         name = open('System/name.txt', 'w')
         name.write('Герой')
@@ -211,6 +248,14 @@ try:
     name = open('System/name.txt', 'r')
 except FileNotFoundError:
     print('Файла name.txt не существует. Сброс игры...')
+    slp(1)
+    reset_game()
+
+# Проверка на наличие файла "achievements.txt" в папке System
+try:
+    achievements = open('System/achievements.txt', 'r')
+except FileNotFoundError:
+    print('Файла achievements.txt не существует. Сброс игры...')
     slp(1)
     reset_game()
 
@@ -307,19 +352,21 @@ def menu():
     print(Back.BLACK, Fore.WHITE)
     cls()
     if start_new == True:
-        print("Если возникнут вопросы, пиши в меню: 6\n")
+        if Person.a_0 == 0:
+            print("Если возникнут вопросы, пиши в меню: 6\n")
     print(Back.GREEN, Fore.BLACK)
     print('=========OFFLINE RPG========')
     print(Back.CYAN, '    ПЕРСОНАЖ', Person.name)
     print(Back.MAGENTA, Fore.WHITE)
     print(
-        '0 - Характеристика персонажа\n1 - Инвентарь\n2 - Отправление в Дандж\n3 - Рынок\n4 - PVP Арена\n5 - Статистика\n6 - FAQ/Обновления\n7/exit - Сохранить и выйти')
+        '0 - Характеристика персонажа\n1 - Инвентарь\n2 - Отправление в Дандж\n3 - Рынок\n4 - PVP Арена\n5 - Статистика\n'
+        '6 - FAQ/Обновления\n7 - Достижения\n8/exit - Сохранить и выйти')
     print(Back.GREEN, Fore.BLACK)
     print('============================\n')
     print(Fore.BLACK, Back.WHITE)
-    choose = input('ВАШ ВЫБОР: ==> ')
+    choose_menu = input('ВАШ ВЫБОР: ==> ')
     print(Back.RESET, Fore.RESET)
-    if choose == '0':
+    if choose_menu == '0':
         cls()
         print(Back.GREEN, Fore.BLACK)
         print('============================')
@@ -344,7 +391,7 @@ def menu():
         print(Back.RESET, Fore.RESET)
         menu()
 
-    elif choose == '1':
+    elif choose_menu == '1':
         cls()
         print(Back.GREEN, Fore.BLACK)
         print('============================')
@@ -422,19 +469,19 @@ def menu():
         else:
             menu()
 
-    elif choose == '2':
+    elif choose_menu == '2':
         go_dunge()
 
-    elif choose == '3':
+    elif choose_menu == '3':
         market()
 
-    elif choose == '4':
+    elif choose_menu == '4':
         cls()
         print("\nАрена Закрыта.")
         slp(3)
         menu()
 
-    elif choose == '5':
+    elif choose_menu == '5':
         cls()
         print(Back.WHITE, Fore.BLACK)
         print(Person.name)
@@ -446,7 +493,7 @@ def menu():
         input("\nНажмите ENTER для выхода в МЕНЮ")
         menu()
 
-    elif choose == '6':
+    elif choose_menu == '6':
         cls()
         print(Back.CYAN, Fore.BLACK)
         print("Репозиторий игры (открытый код): https://github.com/Mifman/Offline-RPG")
@@ -456,10 +503,28 @@ def menu():
         input("\nНажмите ENTER для выхода в МЕНЮ")
         menu()
 
+    elif choose_menu == '7':
+        cls()
+        print(Back.BLACK,"        ",Back.CYAN, Fore.BLACK,"ДОСТИЖЕНИЯ:")
+        print(Back.WHITE, Fore.BLACK)
+        print("• Пройдите всё обучение (пометка: необходимо выполнить ни разу не закрыв игру) —", Person.ach_0)
+        print("• Сходите первый раз в дандж —", Person.ach_1)
+        print("• Уничтожьте первого врага —", Person.ach_2)
+        print("• Получите 2 уровень персонажа —", Person.ach_3)
+        print("• Получите 10 уровень персонажа —", Person.ach_4)
+        print("• Сходите в дандж 'Подземелье' —", Person.ach_5)
+        print("• Получите 30 уровень —", Person.ach_6)
+        print("• Получите 40 уровень —", Person.ach_7)
+        print("• Получите 50 уровень —", Person.ach_8)
+        print("• Получите 60 уровень —", Person.ach_9)
+        input("\nНажмите ENTER для выхода в МЕНЮ")
+        menu()
 
-    elif choose == '7':
+    elif choose_menu == '8' or choose_menu == 'exit':
         m_write_pack()
         m_write_save()
+        m_write_achievements()
+        exit()
 
     else:
         print(Back.RED, Fore.BLACK)
@@ -472,6 +537,13 @@ def menu():
 def market():
     cls()
     if start_new == True:
+        Person.a_0 += 1
+        if Person.a_0 > 1 and Person.a_0 < 3:
+            print("\nРазблокировано достижение — 'ПРОЙДИТЕ ОБУЧЕНИЕ'!\n")
+            slp(2)
+            Person.ach_0 = "Выполнено!"
+            m_write_achievements()
+
         print(Back.WHITE, Fore.BLACK)
         print('Это рынок. Здесь ты можешь приобрести необходимые тебе вещи.')
         slp(4)
@@ -773,8 +845,11 @@ def goblin():
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 2)
     Enemy.loot = rdm.randint(0, 1)
 
-    Enemy.stamina = Enemy.stamina_default
-    Enemy.hp = Enemy.hp_default
+    Enemy.hp = 4 + Enemy.level
+    Enemy.hp_default = Enemy.hp
+    Enemy.stamina = Enemy.hp_default / 2
+    Enemy.stamina_default = Enemy.stamina
+    Enemy.damage = 1 + Enemy.level
 
 
 # Орк (1-6)
@@ -784,8 +859,10 @@ def ork():
     Enemy.damage = 1 + Enemy.level + rdm.randint(0, 2)
     Enemy.loot = rdm.randint(0, 1)
 
-    Enemy.stamina = Enemy.stamina_default
-    Enemy.hp = Enemy.hp_default
+    Enemy.hp = 4 + Enemy.level
+    Enemy.hp_default = Enemy.hp
+    Enemy.stamina = Enemy.hp_default / 2
+    Enemy.stamina_default = Enemy.stamina
 
 
 # Паук (2-6)
@@ -798,6 +875,11 @@ def spider():
     Enemy.hp = 4 + Enemy.level + rdm.randint(0, 2)
     Enemy.loot = 0
 
+    Enemy.hp_default = Enemy.hp
+    Enemy.stamina = Enemy.hp_default / 2
+    Enemy.stamina_default = Enemy.stamina
+    Enemy.damage = 1 + Enemy.level
+
 
 # Кикимора (1-6)
 def kikimora():
@@ -805,8 +887,11 @@ def kikimora():
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 6)
     Enemy.loot = rdm.randint(0, 2)
 
-    Enemy.stamina = Enemy.stamina_default
-    Enemy.hp = Enemy.hp_default
+    Enemy.hp = 4 + Enemy.level
+    Enemy.hp_default = Enemy.hp
+    Enemy.stamina = Enemy.hp_default / 2
+    Enemy.stamina_default = Enemy.stamina
+    Enemy.damage = 1 + Enemy.level
 
 
 # Энт (1-6, кроме 2,4,5)
@@ -815,8 +900,11 @@ def ent():
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 5)
     Enemy.loot = rdm.randint(0, 1)
 
-    Enemy.stamina = Enemy.stamina_default
-    Enemy.hp = Enemy.hp_default
+    Enemy.hp = 4 + Enemy.level
+    Enemy.hp_default = Enemy.hp
+    Enemy.stamina = Enemy.hp_default / 2
+    Enemy.stamina_default = Enemy.stamina
+    Enemy.damage = 1 + Enemy.level
 
 
 # Кентавр (1-6, кроме 2,4,5)
@@ -825,8 +913,11 @@ def kentavr():
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 3)
     Enemy.loot = rdm.randint(0, 1)
 
-    Enemy.stamina = Enemy.stamina_default
-    Enemy.hp = Enemy.hp_default
+    Enemy.hp = 4 + Enemy.level
+    Enemy.hp_default = Enemy.hp
+    Enemy.stamina = Enemy.hp_default / 2
+    Enemy.stamina_default = Enemy.stamina
+    Enemy.damage = 1 + Enemy.level
 
 
 # Элементаль (2-6)
@@ -835,8 +926,11 @@ def elemental():
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 6)
     Enemy.loot = rdm.randint(0, 3)
 
-    Enemy.stamina = Enemy.stamina_default
-    Enemy.hp = Enemy.hp_default
+    Enemy.hp = 4 + Enemy.level
+    Enemy.hp_default = Enemy.hp
+    Enemy.stamina = Enemy.hp_default / 2
+    Enemy.stamina_default = Enemy.stamina
+    Enemy.damage = 1 + Enemy.level
 
 
 # Тролль (1-6)
@@ -845,8 +939,11 @@ def troll():
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 3)
     Enemy.loot = rdm.randint(0, 3)
 
-    Enemy.stamina = Enemy.stamina_default
-    Enemy.hp = Enemy.hp_default
+    Enemy.hp = 4 + Enemy.level
+    Enemy.hp_default = Enemy.hp
+    Enemy.stamina = Enemy.hp_default / 2
+    Enemy.stamina_default = Enemy.stamina
+    Enemy.damage = 1 + Enemy.level
 
 
 # Циклоп (3-6)
@@ -854,12 +951,13 @@ def cyklop():
     Enemy.name = "Циклоп"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 5)
 
-    Enemy.stamina = Enemy.stamina_default
-    Enemy.hp = Enemy.hp_default
-
     Enemy.hp = 4 + Enemy.level + rdm.randint(0, 5)
     Enemy.damage = 1 + Enemy.level + rdm.randint(0, 2)
     Enemy.loot = rdm.randint(0, 2)
+
+    Enemy.hp_default = Enemy.hp
+    Enemy.stamina = Enemy.hp_default / 2
+    Enemy.stamina_default = Enemy.stamina
 
 
 # Демон (4-6)
@@ -867,12 +965,13 @@ def demon():
     Enemy.name = "Демон"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 5)
 
-    Enemy.stamina = Enemy.stamina_default
-    Enemy.hp = Enemy.hp_default
-
     Enemy.hp = 4 + Enemy.level + rdm.randint(0, 11)
     Enemy.damage = 1 + Enemy.level + rdm.randint(0, 4)
     Enemy.loot = rdm.randint(0, 2)
+
+    Enemy.hp_default = Enemy.hp
+    Enemy.stamina = Enemy.hp_default / 2
+    Enemy.stamina_default = Enemy.stamina
 
 
 # Тэнгу (человек-ворон) (1-6, кроме 2,4,5)
@@ -881,8 +980,11 @@ def tengu():
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 5)
     Enemy.loot = rdm.randint(0, 3)
 
-    Enemy.stamina = Enemy.stamina_default
-    Enemy.hp = Enemy.hp_default
+    Enemy.hp = 4 + Enemy.level
+    Enemy.hp_default = Enemy.hp
+    Enemy.stamina = Enemy.hp_default / 2
+    Enemy.stamina_default = Enemy.stamina
+    Enemy.damage = 1 + Enemy.level
 
 
 # Горгона (2-6)
@@ -892,8 +994,10 @@ def gorgona():
     Enemy.damage = 1 + Enemy.level + rdm.randint(0, 4)
     Enemy.loot = rdm.randint(0, 1)
 
-    Enemy.stamina = Enemy.stamina_default
-    Enemy.hp = Enemy.hp_default
+    Enemy.hp = 4 + Enemy.level
+    Enemy.hp_default = Enemy.hp
+    Enemy.stamina = Enemy.hp_default / 2
+    Enemy.stamina_default = Enemy.stamina
 
 
 # Скелет (2,4,5)
@@ -902,8 +1006,11 @@ def skelet():
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 3)
     Enemy.loot = rdm.randint(0, 1)
 
-    Enemy.stamina = Enemy.stamina_default
-    Enemy.hp = Enemy.hp_default
+    Enemy.hp = 4 + Enemy.level
+    Enemy.hp_default = Enemy.hp
+    Enemy.stamina = Enemy.hp_default / 2
+    Enemy.stamina_default = Enemy.stamina
+    Enemy.damage = 1 + Enemy.level
 
 
 # Оборотень (1-6, кроме 4,5)
@@ -911,24 +1018,26 @@ def oboroten():
     Enemy.name = "Оборотень"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 3)
 
-    Enemy.stamina = Enemy.stamina_default
-    Enemy.hp = Enemy.hp_default
-
     Enemy.hp = 4 + Enemy.level + rdm.randint(0, 4)
     Enemy.loot = rdm.randint(0, 3)
+
+    Enemy.hp_default = Enemy.hp
+    Enemy.stamina = Enemy.hp_default / 2
+    Enemy.stamina_default = Enemy.stamina
+    Enemy.damage = 1 + Enemy.level
 
 
 # Лич (4,5)
 def lich():
     Enemy.name = "Лич"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 5)
-
-    Enemy.stamina = Enemy.stamina_default
-    Enemy.hp = Enemy.hp_default
-
     Enemy.hp = 4 + Enemy.level + rdm.randint(0, 11)
     Enemy.damage = 1 + Enemy.level + rdm.randint(0, 6)
     Enemy.loot = rdm.randint(0, 4)
+
+    Enemy.hp_default = Enemy.hp
+    Enemy.stamina = Enemy.hp_default / 2
+    Enemy.stamina_default = Enemy.stamina
 
 
 # Зомби (2,4,5)
@@ -936,11 +1045,13 @@ def zombi():
     Enemy.name = "Зомби"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 3)
 
-    Enemy.stamina = Enemy.stamina_default
-    Enemy.hp = Enemy.hp_default
-
     Enemy.hp = 4 + Enemy.level + rdm.randint(0, 3)
     Enemy.loot = rdm.randint(0, 1)
+
+    Enemy.hp_default = Enemy.hp
+    Enemy.stamina = Enemy.hp_default / 2
+    Enemy.stamina_default = Enemy.stamina
+    Enemy.damage = 1 + Enemy.level
 
 
 # Персонаж (другой "игрок") (1-6)
@@ -957,9 +1068,11 @@ def player():
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 3)
     Enemy.hp = 4 + Enemy.level + rdm.randint(3, 9)
     Enemy.damage = 1 + Enemy.level + rdm.randint(0, 3)
-    Enemy.stamina = Enemy.stamina_default
     Enemy.loot = rdm.randint(1, 3)
 
+    Enemy.hp_default = Enemy.hp
+    Enemy.stamina = Enemy.hp_default / 2
+    Enemy.stamina_default = Enemy.stamina
 
 ##########################
 ### ПЕРЕМЕННЫЕ
@@ -1283,6 +1396,12 @@ def fight(v1, v2, v3):
 
         # Если враг повержен
         if Enemy.hp <= 0 and Person.hp > 0:
+            if Person.ach_2 != "Выполнено!":
+                print("\nРазблокировано достижение — 'Уничтожьте первого врага'!\n")
+                slp(2)
+                Person.ach_2 = "Выполнено!"
+                m_write_achievements()
+
             slp(2)
             print("\n")
             print(Back.GREEN, Fore.BLACK)
@@ -1827,6 +1946,42 @@ def dunge():
     slp(3.5)
     if Person.xp >= Person.multiplier:
         Person.level += 1
+
+        if Person.level == 2:
+            print("\nРазблокировано достижение — 'Получите 2 уровень'!\n")
+            slp(2)
+            Person.ach_3 = "Выполнено!"
+            m_write_achievements()
+        if Person.level == 10:
+            print("\nРазблокировано достижение — 'Получите 10 уровень'!\n")
+            slp(2)
+            Person.ach_4 = "Выполнено!"
+            m_write_achievements()
+
+        if Person.level == 30:
+            print("\nРазблокировано достижение — 'Получите 30 уровень'!\n")
+            slp(2)
+            Person.ach_6 = "Выполнено!"
+            m_write_achievements()
+
+        if Person.level == 40:
+            print("\nРазблокировано достижение — 'Получите 40 уровень'!\n")
+            slp(2)
+            Person.ach_7 = "Выполнено!"
+            m_write_achievements()
+
+        if Person.level == 50:
+            print("\nРазблокировано достижение — 'Получите 50 уровень'!\n")
+            slp(2)
+            Person.ach_8 = "Выполнено!"
+            m_write_achievements()
+
+        if Person.level == 60:
+            print("\nРазблокировано достижение — 'Получите 60 уровень'!\n")
+            slp(2)
+            Person.ach_9 = "Выполнено!"
+            m_write_achievements()
+
         Person.xp -= Person.multiplier
         print("")
         print(Person.name, " получил новый уровень! (", Person.level, ")", sep='')
@@ -1857,6 +2012,13 @@ def dunge():
 def go_dunge():
     if start_new:
         cls()
+        Person.a_0 += 1
+        if Person.a_0 > 1 and Person.a_0 < 3:
+            print("\nРазблокировано достижение — 'ПРОЙДИТЕ ОБУЧЕНИЕ'!\n")
+            slp(2)
+            Person.ach_0 = "Выполнено!"
+            m_write_achievements()
+
         print(Back.WHITE, Fore.BLACK, '\nЧто ж, мы дошли до самого интересного - до походов в данджи...')
         input('\nНажми ENTER для продолжения')
         print('\nЗдесь, по сути, происходит набив опыта и прочих плюшек. На данджах основана вся игра.')
@@ -1907,6 +2069,12 @@ def go_dunge():
     choose = input("\nВаш выбор: ==> ")
 
     if choose == "0":
+        if Person.ach_1 == "Не выполнено":
+            print("\nРазблокировано достижение — 'Сходите первый раз в дандж'!\n")
+            slp(2)
+            Person.ach_1 = "Выполнено!"
+            m_write_achievements()
+
         slp(0.5)
         print(Back.WHITE, Fore.BLACK)  # Белый фон, чёрный шрифт (фон битв)
         print("\nВаш выбор: Лес")
@@ -1919,6 +2087,12 @@ def go_dunge():
             cls()
             go_dunge()
         else:
+            if Person.ach_5 != "Выполнено!":
+                print("\nРазблокировано достижение — 'Сходите в дандж 'Подземелье''!\n")
+                slp(2)
+                Person.ach_5 = "Выполнено!"
+                m_write_achievements()
+
             print(Back.WHITE, Fore.BLACK)  # Белый фон, чёрный шрифт (фон битв)
             print("\nВаш выбор: Подземелье")
             Person.current_dunge = "Подземелье"
@@ -2143,5 +2317,66 @@ if start_new == True:
     print('\nВот меню, которое ты будешь видеть при каждом заходе в игру. Пора уже привыкать...\n')
     input('\nНАЖМИ ENTER ЧТОБЫ ЕГО УВИДЕТЬ')
     cls()
+
+# Загрузка достижений
+achievements = open('System/achievements.txt', 'r')
+achievements.seek(0)
+
+# Всё сразу
+Person.ach_0 = achievements.readline()
+Person.ach_1 = achievements.readline()
+Person.ach_2 = achievements.readline()
+Person.ach_3 = achievements.readline()
+Person.ach_4 = achievements.readline()
+Person.ach_5 = achievements.readline()
+Person.ach_6 = achievements.readline()
+Person.ach_7 = achievements.readline()
+Person.ach_8 = achievements.readline()
+Person.ach_9 = achievements.readline()
+
+if Person.ach_0 == "Не выполнено\n":
+    Person.ach_0 = "Не выполнено"
+if Person.ach_1 == "Не выполнено\n":
+    Person.ach_1 = "Не выполнено"
+if Person.ach_2 == "Не выполнено\n":
+    Person.ach_2 = "Не выполнено"
+if Person.ach_3 == "Не выполнено\n":
+    Person.ach_3 = "Не выполнено"
+if Person.ach_4 == "Не выполнено\n":
+    Person.ach_4 = "Не выполнено"
+if Person.ach_5 == "Не выполнено\n":
+    Person.ach_5 = "Не выполнено"
+if Person.ach_6 == "Не выполнено\n":
+    Person.ach_6 = "Не выполнено"
+if Person.ach_7 == "Не выполнено\n":
+    Person.ach_7 = "Не выполнено"
+if Person.ach_8 == "Не выполнено\n":
+    Person.ach_8 = "Не выполнено"
+if Person.ach_9 == "Не выполнено\n":
+    Person.ach_9 = "Не выполнено"
+
+if Person.ach_0 == "Выполнено!\n":
+    Person.ach_0 = "Выполнено!"
+if Person.ach_1 == "Выполнено!\n":
+    Person.ach_1 = "Выполнено!"
+if Person.ach_2 == "Выполнено!\n":
+    Person.ach_2 = "Выполнено!"
+if Person.ach_3 == "Выполнено!\n":
+    Person.ach_3 = "Выполнено!"
+if Person.ach_4 == "Выполнено!\n":
+    Person.ach_4 = "Выполнено!"
+if Person.ach_5 == "Выполнено!\n":
+    Person.ach_5 = "Выполнено!"
+if Person.ach_6 == "Выполнено!\n":
+    Person.ach_6 = "Выполнено!"
+if Person.ach_7 == "Выполнено!\n":
+    Person.ach_7 = "Выполнено!"
+if Person.ach_8 == "Выполнено!\n":
+    Person.ach_8 = "Выполнено!"
+if Person.ach_9 == "Выполнено!\n":
+    Person.ach_9 = "Выполнено!"
+
+achievements.close()
+
 
 menu()
