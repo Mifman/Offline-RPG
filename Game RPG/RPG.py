@@ -113,16 +113,16 @@ class Person:
     mana_default = 10 + level  # По умолчанию
 
     # Достижения
-    ach_0 = "Не выполнено" # Пройдите всё обучение (пометка: необходимо выполнить ни разу не закрыв игру)
-    ach_1 = "Не выполнено" # Сходите первый раз в дандж
-    ach_2 = "Не выполнено" # Уничтожьте первого врага
-    ach_3 = "Не выполнено" # Получите 2 уровень персонажа
-    ach_4 = "Не выполнено" # Получите 10 уровень персонажа
-    ach_5 = "Не выполнено" # Сходите в дандж "Подземелье"
-    ach_6 = "Не выполнено" # Получите 30 уровень
-    ach_7 = "Не выполнено" # Получите 40 уровень
-    ach_8 = "Не выполнено" # Получите 50 уровень
-    ach_9 = "Не выполнено" # Получите 60 уровень
+    ach_0 = "Не выполнено"  # Пройдите всё обучение (пометка: необходимо выполнить ни разу не закрыв игру)
+    ach_1 = "Не выполнено"  # Сходите первый раз в дандж
+    ach_2 = "Не выполнено"  # Уничтожьте первого врага
+    ach_3 = "Не выполнено"  # Получите 2 уровень персонажа
+    ach_4 = "Не выполнено"  # Получите 10 уровень персонажа
+    ach_5 = "Не выполнено"  # Сходите в дандж "Подземелье"
+    ach_6 = "Не выполнено"  # Получите 30 уровень
+    ach_7 = "Не выполнено"  # Получите 40 уровень
+    ach_8 = "Не выполнено"  # Получите 50 уровень
+    ach_9 = "Не выполнено"  # Получите 60 уровень
     # Идёт по порядку достижений
     a_0 = 0
     a_1 = False
@@ -134,7 +134,6 @@ class Person:
     a_7 = False
     a_8 = False
     a_9 = False
-
 
     # Зелья
     potion_pow = 0
@@ -193,12 +192,16 @@ def m_write_pack():
         '{0}{1}{2}{3}'.format(Person.potion_pow, Person.potion_heal, Person.potion_mana, Person.pack_chest))
     save_inventory.close()
 
+
 # Пересохраение достижений (achievements.txt)
 def m_write_achievements():
     achievements = open('System/achievements.txt', 'w')
     achievements.seek(0)
     achievements.write(
-        '{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n{6}\n{7}\n{8}\n{9}'.format(Person.ach_0, Person.ach_1, Person.ach_2, Person.ach_3, Person.ach_4, Person.ach_5, Person.ach_6, Person.ach_7, Person.ach_8, Person.ach_9))
+        '{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n{6}\n{7}\n{8}\n{9}'.format(Person.ach_0, Person.ach_1, Person.ach_2,
+                                                                  Person.ach_3, Person.ach_4, Person.ach_5,
+                                                                  Person.ach_6, Person.ach_7, Person.ach_8,
+                                                                  Person.ach_9))
     achievements.close()
 
 
@@ -217,7 +220,7 @@ def reset_game():
 
         achievements = open('System/achievements.txt', 'w')
         achievements.write('Не выполнено\nНе выполнено\nНе выполнено\nНе выполнено\nНе выполнено\nНе выполнено\n'
-                           'Не выполнено\nНе выполнено\nНе выполнено\nНе выполнено') # Достижения
+                           'Не выполнено\nНе выполнено\nНе выполнено\nНе выполнено')  # Достижения
         achievements.close()
 
         name = open('System/name.txt', 'w')
@@ -494,18 +497,53 @@ def menu():
         menu()
 
     elif choose_menu == '6':
-        cls()
-        print(Back.CYAN, Fore.BLACK)
-        print("Репозиторий игры (открытый код): https://github.com/Mifman/Offline-RPG")
-        print("Руководства и обновления: https://github.com/Mifman/Offline-RPG/discussions")
-        print("Разработчик: Mifman")
-        print("Контакт: https://vk.com/mifman")
-        input("\nНажмите ENTER для выхода в МЕНЮ")
+        # FAQ/Обновления
+        faq = 'None'
+        while faq != "":
+            cls()
+            print(Back.CYAN, Fore.BLACK)
+            print("Репозиторий игры (открытый код): https://github.com/Mifman/Offline-RPG")
+            print("Руководства и обновления: https://github.com/Mifman/Offline-RPG/discussions")
+            print("Разработчик: Mifman")
+            print("Контакт: https://vk.com/mifman")
+            faq = input("\n1. Про данджи\n"
+                        "2. Про рынок\n"
+                        "3. Про PVP арены\n"
+                        "ENTER - выход в МЕНЮ\n"
+                        "   \nВаш выбор: ==>")
+
+            if faq == "1":
+                cls()
+                print("\nДанджы в игре представляют собой основную механику игры. В данджах происходит\n"
+                      "Набив опыта, получение ресурсов и конечно же битва с обитателями и другими\n"
+                      "Агрессивно настроенными 'игроками'. Механика боя проста:\n\n"
+                      "• Выбираешь первое действие (то есть что ты будешь делать в первую очередь)\n"
+                      "• Выбираешь второе действие (по сути, заполняешь два слота для действия)\n"
+                      "• Далее выбирает враг\n"
+                      "• После выбора идёт бой, начиная с первого действия (или с первого слота)\n"
+                      "• Игра идёт до тех пор, пока один из вас не погибнет")
+                input("ENTER - выход в меню 'FAQ/Обновления'")
+
+            elif faq == "2":
+                cls()
+                print("\nРынок представляет собой набор из различных не связанных между собой лавок с\n"
+                      "Продавцами всякого. На рынке можно закупиться необходимыми зельями, кристаллами и т.д.")
+                input("ENTER - выход в меню 'FAQ/Обновления'")
+
+            elif faq == "3":
+                cls()
+                print("\nPVP арены — место не для слабых. Здесь нет места тем, кто захотел быстренько наживиться добром и опытом.\n"
+                      "В PVP аренах можно сразиться с более сильными противниками, которые спуску давать не станут.\n"
+                      "Идти туда — значит быть хотя бы 8 уровня прокачки. На кон ставится сумма монет и кто одержит победу,\n"
+                      "Тот и забирает всю ставку.")
+                input("ENTER - выход в меню 'FAQ/Обновления'")
+
         menu()
+
 
     elif choose_menu == '7':
         cls()
-        print(Back.BLACK,"        ",Back.CYAN, Fore.BLACK,"ДОСТИЖЕНИЯ:")
+        print(Back.BLACK, "        ", Back.CYAN, Fore.BLACK, "ДОСТИЖЕНИЯ:")
         print(Back.WHITE, Fore.BLACK)
         print("• Пройдите всё обучение (пометка: необходимо выполнить ни разу не закрыв игру) —", Person.ach_0)
         print("• Сходите первый раз в дандж —", Person.ach_1)
@@ -1074,6 +1112,7 @@ def player():
     Enemy.stamina = Enemy.hp_default / 2
     Enemy.stamina_default = Enemy.stamina
 
+
 ##########################
 ### ПЕРЕМЕННЫЕ
 # Виды лута
@@ -1629,7 +1668,7 @@ def fight(v1, v2, v3):
         elif slot_fight_en[0] == "Защита":
             if Enemy.level < Person.level:
                 t_hp_self = Enemy.hp - (
-                            Person.Weapon.power * 0.25)  # Бот будет предполагать, что его защита провалилась
+                        Person.Weapon.power * 0.25)  # Бот будет предполагать, что его защита провалилась
             elif Enemy.level >= Person.level:
                 t_hp_self = Enemy.hp - (Person.Weapon.power * 0.1)
         elif slot_fight_en[0] == "Отдых":
@@ -2377,6 +2416,5 @@ if Person.ach_9 == "Выполнено!\n":
     Person.ach_9 = "Выполнено!"
 
 achievements.close()
-
 
 menu()
