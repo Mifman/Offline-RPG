@@ -23,6 +23,7 @@ x = 0  # Для рынка
 v1 = 0
 v2 = 0
 v3 = 0
+v4 = 0
 
 # Выбор попавшегося врага
 this_enemy = False  # True, если данный враг может попасться в данном дандже
@@ -111,6 +112,9 @@ class Person:
     stamina_default = hp / 3  # По умолчанию
     mana = 10 + level  # Если класс персонажа Маг, данная переменная играет роль, в остальном нет
     mana_default = 10 + level  # По умолчанию
+
+    # Арена
+    rand_bet = rdm.randint(10, 35)  # Для арены (ставка для входа)
 
     # Достижения
     ach_0 = "Не выполнено"  # Пройдите всё обучение (пометка: необходимо выполнить ни разу не закрыв игру)
@@ -480,9 +484,164 @@ def menu():
 
     elif choose_menu == '4':
         cls()
-        print("\nАрена Закрыта.")
-        slp(3)
-        menu()
+        # Вход
+        cycle = True
+        if Person.level >= 8:
+            while cycle == True:
+                cls()
+                print(Back.WHITE,Fore.BLACK)
+                print("\nДобро пожалось на арену! Для принятия участия необходимо внести в банк", Person.rand_bet, "монет.")
+                print("У вас",Person.coins,"монет.")
+                print("\n1. Внести", Person.rand_bet, "монет\n"
+                      "ENTER - Выход")
+                bet = input("\nВаш выбор: ==>")
+                if bet == "1":
+                    if Person.coins < Person.rand_bet:
+                        print(Back.RED, Fore.BLACK)
+                        print("У вас не хватает монет!")
+                        slp(3)
+                    else:
+                        slp(1.5)
+                        Person.coins -= Person.rand_bet
+                        Person.rand_bet += Person.rand_bet
+                        player_arena()
+                        print("Ставки сделаны! Вашим противником станет", Enemy.name)
+                        slp(2.3)
+                        print("\nНа кону",Person.rand_bet, "монет.")
+                        сountdown = 5
+                        cycle = False
+                        for i in range(5):
+                            cls()
+                            print(Back.WHITE, Fore.BLACK)
+                            print("Вход через ", end='')
+                            print(сountdown)
+                            slp(1)
+                            сountdown -= 1
+                            cls()
+                        fight(v1,v2,v3,v4)
+
+                        # После битвы
+                        cls()
+                        slp(1)
+                        if Person.hp > 0:
+                            print(Back.GREEN, Fore.BLACK)
+                            print("\nВы одержали победу на арене!")
+                            print("Получено",Person.rand_bet,"монет!")
+                            Person.coins += Person.rand_bet
+                            slp(3)
+                            # Настройки по умолчанию
+                            Person.hp = Person.hp_default
+                            Person.Weapon.power = Person.Weapon.power_default
+                            Person.Weapon.critical = Person.Weapon.critical_default
+                            Person.stamina = Person.stamina_default
+                            Person.mana = Person.mana_default
+
+                            Person.day += 1
+
+                            Enemy.hp = Enemy.hp_default
+                            Enemy.stamina = Enemy.stamina_default
+
+                            # Начисление XP
+                            Person.xp += round(rdm.randint(10, 25) / 1.5, 3)
+                            print("**Вы получили", round(rdm.randint(10, 25) / 1.5, 3), "опыта**")
+                            slp(3.5)
+                            if Person.xp >= Person.multiplier:
+                                Person.level += 1
+
+                                if Person.level == 2:
+                                    print("\nРазблокировано достижение — 'Получите 2 уровень'!\n")
+                                    slp(2)
+                                    Person.ach_3 = "Выполнено!"
+                                    m_write_achievements()
+                                if Person.level == 10:
+                                    print("\nРазблокировано достижение — 'Получите 10 уровень'!\n")
+                                    slp(2)
+                                    Person.ach_4 = "Выполнено!"
+                                    m_write_achievements()
+
+                                if Person.level == 30:
+                                    print("\nРазблокировано достижение — 'Получите 30 уровень'!\n")
+                                    slp(2)
+                                    Person.ach_6 = "Выполнено!"
+                                    m_write_achievements()
+
+                                if Person.level == 40:
+                                    print("\nРазблокировано достижение — 'Получите 40 уровень'!\n")
+                                    slp(2)
+                                    Person.ach_7 = "Выполнено!"
+                                    m_write_achievements()
+
+                                if Person.level == 50:
+                                    print("\nРазблокировано достижение — 'Получите 50 уровень'!\n")
+                                    slp(2)
+                                    Person.ach_8 = "Выполнено!"
+                                    m_write_achievements()
+
+                                if Person.level == 60:
+                                    print("\nРазблокировано достижение — 'Получите 60 уровень'!\n")
+                                    slp(2)
+                                    Person.ach_9 = "Выполнено!"
+                                    m_write_achievements()
+
+                                Person.xp -= Person.multiplier
+                                print("")
+                                print(Person.name, " получил новый уровень! (", Person.level, ")", sep='')
+                                Person.hp = 18 + (Person.level + 1)
+                                Person.hp_default = 18 + (Person.level + 1)
+                                Person.stamina = Person.hp / 3
+                                Person.stamina_default = Person.hp / 3
+                                Person.multiplier = Person.level * 12
+                                Person.mana = 10 + Person.level
+                                Person.mana_default = 10 + Person.level
+
+                            if Person.xp >= Person.Weapon.multiplier:
+                                Person.Weapon.level_w += 1
+                                print("")
+                                print("Оружие ", Person.name, " получило новый уровень! (", Person.Weapon.level_w, ")",
+                                      sep='')
+                                Person.Weapon.power = 5 + Person.Weapon.level_w
+                                Person.Weapon.power_default = 5 + Person.Weapon.level_w
+                                Person.Weapon.critical = Person.Weapon.power * 1.5
+                                Person.Weapon.multiplier = Person.Weapon.level_w * 9
+
+                            m_write_save()
+                            m_write_pack()
+                            input("Нажмите ENTER для продолжения")
+                            menu()
+
+                        else:
+                            # Настройки по умолчанию
+                            Person.hp = Person.hp_default
+                            Person.Weapon.power = Person.Weapon.power_default
+                            Person.Weapon.critical = Person.Weapon.critical_default
+                            Person.stamina = Person.stamina_default
+                            Person.mana = Person.mana_default
+
+                            Person.day += 1
+
+                            Enemy.hp = Enemy.hp_default
+                            Enemy.stamina = Enemy.stamina_default
+
+                            m_write_save()
+                            m_write_pack()
+                            menu()
+
+
+
+                elif bet == "":
+                    cycle = False
+                    menu()
+
+                else:
+                    print(Back.RED, Fore.BLACK)
+                    print("\nВведите корректные данные!")
+                    slp(1.5)
+
+
+        else:
+            print("\nВы не достигли 8 уровня! Арена для вас закрыта.")
+            input("\nENTER - назад в меню")
+            menu()
 
     elif choose_menu == '5':
         cls()
@@ -505,6 +664,7 @@ def menu():
             print("Репозиторий игры (открытый код): https://github.com/Mifman/Offline-RPG")
             print("Руководства и обновления: https://github.com/Mifman/Offline-RPG/discussions")
             print("Разработчик: Mifman")
+            print("Версия игры: 1.0")
             print("Контакт: https://vk.com/mifman")
             faq = input("\n1. Про данджи\n"
                         "2. Про рынок\n"
@@ -866,6 +1026,15 @@ class Enemy:
     critical = damage * 1.5
     loot = 0
 
+    is_player = False
+    potion_pow = 0
+    potion_heal = 0
+
+    rand_potion_en = None
+
+# Для ИИ (предполагаемые статы здоровья)
+t_hp = Person.hp  # Противника
+t_hp_self = Enemy.hp  # Свои
 
 ##########################
 # Виды врагов
@@ -882,12 +1051,14 @@ def goblin():
     Enemy.name = "Гоблин"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 2)
     Enemy.loot = rdm.randint(0, 1)
+    Enemy.is_player = False
 
     Enemy.hp = 4 + Enemy.level
     Enemy.hp_default = Enemy.hp
     Enemy.stamina = Enemy.hp_default / 2
     Enemy.stamina_default = Enemy.stamina
     Enemy.damage = 1 + Enemy.level
+    Enemy.critical = Enemy.damage * 1.5
 
 
 # Орк (1-6)
@@ -896,11 +1067,13 @@ def ork():
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 4)
     Enemy.damage = 1 + Enemy.level + rdm.randint(0, 2)
     Enemy.loot = rdm.randint(0, 1)
+    Enemy.is_player = False
 
     Enemy.hp = 4 + Enemy.level
     Enemy.hp_default = Enemy.hp
     Enemy.stamina = Enemy.hp_default / 2
     Enemy.stamina_default = Enemy.stamina
+    Enemy.critical = Enemy.damage * 1.5
 
 
 # Паук (2-6)
@@ -912,11 +1085,13 @@ def spider():
 
     Enemy.hp = 4 + Enemy.level + rdm.randint(0, 2)
     Enemy.loot = 0
+    Enemy.is_player = False
 
     Enemy.hp_default = Enemy.hp
     Enemy.stamina = Enemy.hp_default / 2
     Enemy.stamina_default = Enemy.stamina
     Enemy.damage = 1 + Enemy.level
+    Enemy.critical = Enemy.damage * 1.5
 
 
 # Кикимора (1-6)
@@ -924,12 +1099,14 @@ def kikimora():
     Enemy.name = "Кикимора"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 6)
     Enemy.loot = rdm.randint(0, 2)
+    Enemy.is_player = False
 
     Enemy.hp = 4 + Enemy.level
     Enemy.hp_default = Enemy.hp
     Enemy.stamina = Enemy.hp_default / 2
     Enemy.stamina_default = Enemy.stamina
     Enemy.damage = 1 + Enemy.level
+    Enemy.critical = Enemy.damage * 1.5
 
 
 # Энт (1-6, кроме 2,4,5)
@@ -937,12 +1114,14 @@ def ent():
     Enemy.name = "Энт"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 5)
     Enemy.loot = rdm.randint(0, 1)
+    Enemy.is_player = False
 
     Enemy.hp = 4 + Enemy.level
     Enemy.hp_default = Enemy.hp
     Enemy.stamina = Enemy.hp_default / 2
     Enemy.stamina_default = Enemy.stamina
     Enemy.damage = 1 + Enemy.level
+    Enemy.critical = Enemy.damage * 1.5
 
 
 # Кентавр (1-6, кроме 2,4,5)
@@ -950,12 +1129,14 @@ def kentavr():
     Enemy.name = "Кентавр"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 3)
     Enemy.loot = rdm.randint(0, 1)
+    Enemy.is_player = False
 
     Enemy.hp = 4 + Enemy.level
     Enemy.hp_default = Enemy.hp
     Enemy.stamina = Enemy.hp_default / 2
     Enemy.stamina_default = Enemy.stamina
     Enemy.damage = 1 + Enemy.level
+    Enemy.critical = Enemy.damage * 1.5
 
 
 # Элементаль (2-6)
@@ -963,12 +1144,14 @@ def elemental():
     Enemy.name = "Элементаль"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 6)
     Enemy.loot = rdm.randint(0, 3)
+    Enemy.is_player = False
 
     Enemy.hp = 4 + Enemy.level
     Enemy.hp_default = Enemy.hp
     Enemy.stamina = Enemy.hp_default / 2
     Enemy.stamina_default = Enemy.stamina
     Enemy.damage = 1 + Enemy.level
+    Enemy.critical = Enemy.damage * 1.5
 
 
 # Тролль (1-6)
@@ -976,12 +1159,14 @@ def troll():
     Enemy.name = "Тролль"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 3)
     Enemy.loot = rdm.randint(0, 3)
+    Enemy.is_player = False
 
     Enemy.hp = 4 + Enemy.level
     Enemy.hp_default = Enemy.hp
     Enemy.stamina = Enemy.hp_default / 2
     Enemy.stamina_default = Enemy.stamina
     Enemy.damage = 1 + Enemy.level
+    Enemy.critical = Enemy.damage * 1.5
 
 
 # Циклоп (3-6)
@@ -992,10 +1177,12 @@ def cyklop():
     Enemy.hp = 4 + Enemy.level + rdm.randint(0, 5)
     Enemy.damage = 1 + Enemy.level + rdm.randint(0, 2)
     Enemy.loot = rdm.randint(0, 2)
+    Enemy.is_player = False
 
     Enemy.hp_default = Enemy.hp
     Enemy.stamina = Enemy.hp_default / 2
     Enemy.stamina_default = Enemy.stamina
+    Enemy.critical = Enemy.damage * 1.5
 
 
 # Демон (4-6)
@@ -1006,10 +1193,12 @@ def demon():
     Enemy.hp = 4 + Enemy.level + rdm.randint(0, 11)
     Enemy.damage = 1 + Enemy.level + rdm.randint(0, 4)
     Enemy.loot = rdm.randint(0, 2)
+    Enemy.is_player = False
 
     Enemy.hp_default = Enemy.hp
     Enemy.stamina = Enemy.hp_default / 2
     Enemy.stamina_default = Enemy.stamina
+    Enemy.critical = Enemy.damage * 1.5
 
 
 # Тэнгу (человек-ворон) (1-6, кроме 2,4,5)
@@ -1017,12 +1206,14 @@ def tengu():
     Enemy.name = "Тэнгу"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 5)
     Enemy.loot = rdm.randint(0, 3)
+    Enemy.is_player = False
 
     Enemy.hp = 4 + Enemy.level
     Enemy.hp_default = Enemy.hp
     Enemy.stamina = Enemy.hp_default / 2
     Enemy.stamina_default = Enemy.stamina
     Enemy.damage = 1 + Enemy.level
+    Enemy.critical = Enemy.damage * 1.5
 
 
 # Горгона (2-6)
@@ -1031,11 +1222,13 @@ def gorgona():
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 5)
     Enemy.damage = 1 + Enemy.level + rdm.randint(0, 4)
     Enemy.loot = rdm.randint(0, 1)
+    Enemy.is_player = False
 
     Enemy.hp = 4 + Enemy.level
     Enemy.hp_default = Enemy.hp
     Enemy.stamina = Enemy.hp_default / 2
     Enemy.stamina_default = Enemy.stamina
+    Enemy.critical = Enemy.damage * 1.5
 
 
 # Скелет (2,4,5)
@@ -1043,12 +1236,14 @@ def skelet():
     Enemy.name = "Скелет"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 3)
     Enemy.loot = rdm.randint(0, 1)
+    Enemy.is_player = False
 
     Enemy.hp = 4 + Enemy.level
     Enemy.hp_default = Enemy.hp
     Enemy.stamina = Enemy.hp_default / 2
     Enemy.stamina_default = Enemy.stamina
     Enemy.damage = 1 + Enemy.level
+    Enemy.critical = Enemy.damage * 1.5
 
 
 # Оборотень (1-6, кроме 4,5)
@@ -1058,11 +1253,13 @@ def oboroten():
 
     Enemy.hp = 4 + Enemy.level + rdm.randint(0, 4)
     Enemy.loot = rdm.randint(0, 3)
+    Enemy.is_player = False
 
     Enemy.hp_default = Enemy.hp
     Enemy.stamina = Enemy.hp_default / 2
     Enemy.stamina_default = Enemy.stamina
     Enemy.damage = 1 + Enemy.level
+    Enemy.critical = Enemy.damage * 1.5
 
 
 # Лич (4,5)
@@ -1072,16 +1269,19 @@ def lich():
     Enemy.hp = 4 + Enemy.level + rdm.randint(0, 11)
     Enemy.damage = 1 + Enemy.level + rdm.randint(0, 6)
     Enemy.loot = rdm.randint(0, 4)
+    Enemy.is_player = False
 
     Enemy.hp_default = Enemy.hp
     Enemy.stamina = Enemy.hp_default / 2
     Enemy.stamina_default = Enemy.stamina
+    Enemy.critical = Enemy.damage * 1.5
 
 
 # Зомби (2,4,5)
 def zombi():
     Enemy.name = "Зомби"
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 3)
+    Enemy.is_player = False
 
     Enemy.hp = 4 + Enemy.level + rdm.randint(0, 3)
     Enemy.loot = rdm.randint(0, 1)
@@ -1090,6 +1290,7 @@ def zombi():
     Enemy.stamina = Enemy.hp_default / 2
     Enemy.stamina_default = Enemy.stamina
     Enemy.damage = 1 + Enemy.level
+    Enemy.critical = Enemy.damage * 1.5
 
 
 # Персонаж (другой "игрок") (1-6)
@@ -1108,9 +1309,32 @@ def player():
     Enemy.damage = 1 + Enemy.level + rdm.randint(0, 3)
     Enemy.loot = rdm.randint(1, 3)
 
+    Enemy.is_player = False
     Enemy.hp_default = Enemy.hp
     Enemy.stamina = Enemy.hp_default / 2
     Enemy.stamina_default = Enemy.stamina
+    Enemy.critical = Enemy.damage * 1.5
+
+def player_arena():
+    Enemy.name = "Персонаж " + rdm.choice(name_list)
+    Enemy.level = (Person.level - rdm.randint(1,3)) + rdm.randint(0, 4)
+    Enemy.hp = (Person.hp - rdm.randint(1,4)) + rdm.randint(1, 7)
+    Enemy.damage = (Person.Weapon.power - rdm.randint(1,4)) + rdm.randint(1, 7)
+    Enemy.loot = rdm.randint(1, 3)
+
+    Enemy.hp_default = Enemy.hp
+    Enemy.stamina = Enemy.hp_default / 3
+    Enemy.stamina_default = Enemy.stamina
+    Enemy.critical = Enemy.damage * 1.5
+
+    Enemy.is_player = True
+    Enemy.rand_potion_en = rdm.randint(0,1)
+    if Enemy.rand_potion_en == 0:
+        Enemy.potion_pow = rdm.randint(1,2)
+        Enemy.potion_heal = rdm.randint(0,1)
+    else:
+        Enemy.potion_pow = rdm.randint(0, 1)
+        Enemy.potion_heal = rdm.randint(1, 2)
 
 
 ##########################
@@ -1303,29 +1527,36 @@ def stats():  # Для простоты
         print("Зелий Маны:", Person.potion_mana)
 
 
-# Для ИИ (предполагаемые статы здоровья)
-t_hp = Person.hp  # Противника
-t_hp_self = Enemy.hp  # Свои
-
-
 def reset_ai():
     # Веса для ИИ
     v1 = 0  # Атака
     v2 = 0  # Защита
     v3 = 0  # Отдых
+    v4 = 0 # Пить зелье
 
 
 def AI(v1, v2, v3):
-    # Проверки для расределения весов (хп у себя и врага)
+    global t_hp
+    global t_hp_self
+
+    # Для ИИ (предполагаемые статы здоровья)
+    t_hp = Person.hp  # Противника
+    t_hp_self = Enemy.hp  # Свои
+    # Проверки для расределения весов (хп у себя и врага и т.д.)
     if t_hp_self < (Enemy.hp_default / 2):
         v2 += 1
-    if t_hp_self < (Enemy.hp_default / 4):
-        v2 += 2
+    if t_hp_self < (Enemy.hp_default / 2.5):
+        v2 += rdm.randint(1,2)
+        v1 += rdm.randint(0,1)
 
     if t_hp < (Person.hp_default / 2):
         v1 += 1
-    if t_hp < (Person.hp_default / 4):
-        v1 += 2
+    if t_hp < (Person.hp_default / 2.5):
+        v1 += rdm.randint(1,2)
+        v2 += rdm.randint(0, 1)
+
+    if t_hp <= (Person.hp_default) and t_hp > (Person.hp_default / 2):
+        v1 += 1
 
     # slot_fight_en - слот для выбора врага
     slot_en = ["Атака", "Защита"]
@@ -1401,13 +1632,207 @@ def AI(v1, v2, v3):
         if slot_fight_en == "Атака" or slot_fight_en == "Защита":
             Enemy.stamina -= 2
 
+def AI_Player(v1, v2, v3, v4):
+    # Проверки для расределения весов (хп у себя и врага)
+    if t_hp_self < (Enemy.hp_default / 2):
+        v2 += 1
+        v4 += rdm.randint(1,2)
+    if t_hp_self < (Enemy.hp_default / 2.5):
+        v2 += rdm.randint(1, 2)
+        v1 += rdm.randint(0, 1)
+        v4 += rdm.randint(0,1)
 
-def fight(v1, v2, v3):
+    if t_hp < (Person.hp_default / 2):
+        v1 += 1
+        v4 += rdm.randint(0,1)
+    if t_hp < (Person.hp_default / 2.5):
+        v1 += rdm.randint(1, 2)
+        v2 += rdm.randint(0, 1)
+
+    if t_hp <= (Person.hp_default) and t_hp > (Person.hp_default / 2):
+        v1 += rdm.randint(1,4)
+
+    if Enemy.stamina < round(Enemy.stamina_default / 1.5, 3):
+        v3 += 1
+    if Enemy.stamina < round(Enemy.stamina_default / 2.2, 3):
+        v3 += 2
+
+    # slot_fight_en - слот для выбора врага
+    slot_en = ["Атака", "Защита"]
+    slot_en0 = ["Защита", "Отдых"]
+    slot_en1 = ["Атака", "Отдых"]
+    slot_en_all_0 = ["Атака", "Защита", "Отдых", "Пить зелье"]
+    slot_en_all_1 = ["Атака", "Защита", "Отдых"]
+    choose_slot_en = False  # Для цикла
+    while choose_slot_en == False:
+        if Enemy.stamina < 2:
+            v3 += 4
+
+        if v3 >= 3:
+            choose_slot_en = True  # Бот выбрал в предпочтение отдых, но не факт
+
+        rand_slot = rdm.choice(slot_en)  # Рандом выбора
+        if rand_slot == "Атака":
+            if Enemy.stamina < 2:
+                v3 += 2
+            else:
+                choose_slot_en = True
+                v3 -= 1
+        elif rand_slot == "Защита":
+            if Enemy.stamina < 2:
+                v3 += 2
+            else:
+                choose_slot_en = True
+                v3 -= 1
+
+    # Окончательный выбор
+    # Если получится Пить зелье
+    if v4 > v1 and v4 > v2 and v4 > v3:
+        Enemy.rand_potion_en = rdm.randint(0, 1)
+        if Enemy.rand_potion_en == 0:
+            if Enemy.potion_pow > 0:
+                Enemy.potion_pow -= 1
+                Enemy.rand_potion_en = "Зелье силы"
+                slot_fight_en.append("Пить зелье")
+                Enemy.stamina -= 1
+            else:
+                if Enemy.potion_heal > 0:
+                    Enemy.potion_heal -= 1
+                    Enemy.rand_potion_en = "Зелье здоровья"
+                    slot_fight_en.append("Пить зелье")
+                    Enemy.stamina -= 1
+
+        elif Enemy.rand_potion_en == 1:
+            if Enemy.potion_heal > 0:
+                Enemy.potion_heal -= 1
+                Enemy.rand_potion_en = "Зелье здоровья"
+                slot_fight_en.append("Пить зелье")
+                Enemy.stamina -= 1
+            else:
+                if Enemy.potion_pow > 0:
+                    Enemy.potion_pow -= 1
+                    Enemy.rand_potion_en = "Зелье силы"
+                    slot_fight_en.append("Пить зелье")
+                    Enemy.stamina -= 1
+
+        if Enemy.potion_pow == 0 and Enemy.potion_heal == 0:
+            if Enemy.stamina >= 2:
+                rand_slot = rdm.choice(slot_en)
+                slot_fight_en.append(rand_slot)
+
+                # Проверка для траты стамины
+                if slot_fight_en == "Атака" or slot_fight_en == "Защита":
+                    Enemy.stamina -= 2
+            else:
+                slot_fight_en.append("Отдых")
+
+    elif v1 > v2 and v3 <= v1 and v3 <= v2:
+        slot_fight_en.append("Атака")
+        Enemy.stamina -= 2
+
+    elif v2 > v1 and v3 <= v1 and v3 <= v2:
+        slot_fight_en.append("Защита")
+        Enemy.stamina -= 2
+
+    elif v2 == v1 and v3 < v1 and v3 < v2:
+        rand_slot = rdm.choice(slot_en)  # Рандом выбора (50/50)
+        slot_fight_en.append(rand_slot)
+        Enemy.stamina -= 2
+    elif v3 >= v2 and v3 >= v1:
+        slot_fight_en.append("Отдых")
+    elif v3 == v2 and v3 == v1:
+        rand_slot = rdm.choice(slot_en_all_1)
+        slot_fight_en.append(rand_slot)
+
+        # Проверка для траты стамины
+        if slot_fight_en == "Атака" or slot_fight_en == "Защита":
+            Enemy.stamina -= 2
+
+    elif v3 == v2 and v3 > v1:
+        rand_slot = rdm.choice(slot_en0)
+        slot_fight_en.append(rand_slot)
+
+        # Проверка для траты стамины
+        if slot_fight_en != "Отдых":
+            Enemy.stamina -= 2
+
+    elif v3 == v1 and v3 > v2:
+        rand_slot = rdm.choice(slot_en1)
+        slot_fight_en.append(rand_slot)
+
+        # Проверка для траты стамины
+        if slot_fight_en != "Отдых":
+            Enemy.stamina -= 2
+
+    elif v3 < v1 and v3 < v2:
+        rand_slot = rdm.choice(slot_en)
+        slot_fight_en.append(rand_slot)
+
+        # Проверка для траты стамины
+        if slot_fight_en == "Атака" or slot_fight_en == "Защита":
+            Enemy.stamina -= 2
+
+    else:
+        rand_slot = rdm.choice(slot_en_all_0)
+        slot_fight_en.append(rand_slot)
+
+        # Проверка для траты стамины
+        if slot_fight_en == "Атака" or slot_fight_en == "Защита":
+            Enemy.stamina -= 2
+        elif slot_fight_en == "Отдых":
+            Enemy.stamina -= 0
+
+        # Если получится Пить зелье
+        else:
+            Enemy.rand_potion_en = rdm.randint(0,1)
+            if Enemy.rand_potion_en == 0:
+                if Enemy.potion_pow > 0:
+                    Enemy.potion_pow -= 1
+                    Enemy.rand_potion_en = "Зелье силы"
+                    slot_fight_en.append("Пить зелье")
+                    Enemy.stamina -= 1
+                else:
+                    if Enemy.potion_heal > 0:
+                        Enemy.potion_heal -= 1
+                        Enemy.rand_potion_en = "Зелье здоровья"
+                        slot_fight_en.append("Пить зелье")
+                        Enemy.stamina -= 1
+
+            elif Enemy.rand_potion_en == 1:
+                if Enemy.potion_heal > 0:
+                    Enemy.potion_heal -= 1
+                    Enemy.rand_potion_en = "Зелье здоровья"
+                    slot_fight_en.append("Пить зелье")
+                    Enemy.stamina -= 1
+                else:
+                    if Enemy.potion_pow > 0:
+                        Enemy.potion_pow -= 1
+                        Enemy.rand_potion_en = "Зелье силы"
+                        slot_fight_en.append("Пить зелье")
+                        Enemy.stamina -= 1
+
+            if Enemy.potion_pow == 0 and Enemy.potion_heal == 0:
+                if Enemy.stamina >= 2:
+                    rand_slot = rdm.choice(slot_en)
+                    slot_fight_en.append(rand_slot)
+
+                    # Проверка для траты стамины
+                    if slot_fight_en == "Атака" or slot_fight_en == "Защита":
+                        Enemy.stamina -= 2
+                else:
+                    slot_fight_en.append("Отдых")
+
+
+def fight(v1, v2, v3, v4):
     global slot_fight
     global slot_fight_en
 
     use_mana1 = False  # Маг использовал увеличение шанса на кри ложь
     use_mana2 = False  # Маг использовал увеличение здоровья ложь
+
+    # Для ИИ (предполагаемые статы здоровья)
+    t_hp = Person.hp  # Противника
+    t_hp_self = Enemy.hp  # Свои
 
     print(Back.RED, Fore.BLACK)
     slp(1)
@@ -1424,7 +1849,7 @@ def fight(v1, v2, v3):
         if len(slot_fight_en) >= 2:
             slot_fight_en = []
 
-        # Ограничение на макс. кол-во выносливости
+        # Ограничение на макс. кол-во выносливости (для персонажа игрока)
         if Person.stamina > Person.stamina_default:
             Person.stamina = Person.stamina_default
 
@@ -1557,6 +1982,7 @@ def fight(v1, v2, v3):
                                 Person.stamina -= 1
                                 c += 1
                                 pot = True
+                                m_write_pack()
                             else:
                                 print(Back.RED, Fore.BLACK)
                                 print("\nУ вас нет Зелья Силы!")
@@ -1569,6 +1995,7 @@ def fight(v1, v2, v3):
                                 Person.stamina -= 1
                                 c += 1
                                 pot = True
+                                m_write_pack()
                             else:
                                 print(Back.RED, Fore.BLACK)
                                 print("\nУ вас нет Зелья Здоровья!")
@@ -1586,6 +2013,7 @@ def fight(v1, v2, v3):
                                     Person.stamina -= 1
                                     c += 1
                                     pot = True
+                                    m_write_pack()
 
                                 else:
                                     print(Back.RED, Fore.BLACK)
@@ -1656,7 +2084,10 @@ def fight(v1, v2, v3):
         # Выбор для 1 слота
         #########################
         reset_ai()
-        AI(v1, v2, v3)
+        if Enemy.is_player == True:
+            AI_Player(v1,v2,v3,v4)
+        else:
+            AI(v1, v2, v3)
         #########################
 
         # Выбор для 2 слота
@@ -1674,7 +2105,10 @@ def fight(v1, v2, v3):
         elif slot_fight_en[0] == "Отдых":
             v3 -= 1
 
-        AI(v1, v2, v3)
+        if Enemy.is_player == True:
+            AI_Player(v1, v2, v3, v4)
+        else:
+            AI(v1, v2, v3)
         #########################
         # После всех выборов
         for z in range(2):
@@ -1853,17 +2287,16 @@ def fight(v1, v2, v3):
                 Person.stamina += round(Person.stamina_default * 0.4)
                 print("\nВы удачно восстановили", round(Person.stamina_default * 0.4), "выносливости.")
                 slp(2.8)
-                input("\nENTER чтобы продолжить")
 
                 # Для врага
                 if slot_fight_en[z] == "Защита":
                     print("\n", Enemy.name, "решил защититься")
-                    slp(4)
+                    input("\nENTER чтобы продолжить")
 
                 elif slot_fight_en[z] == "Отдых":
                     Enemy.stamina += round(Enemy.stamina_default, 3)
                     print("\n", Enemy.name, "решил восстановить выносливость")
-                    slp(4)
+                    input("\nENTER чтобы продолжить")
 
             # Если отдых и атака
             elif slot_fight[z] == "Отдых" and slot_fight_en[z] == "Атака":
@@ -1881,18 +2314,103 @@ def fight(v1, v2, v3):
                 print("\nВраг восстановил выносливость,\n"
                       "Но", Person.name, "атаковал!")
                 slp(3)
+                print("-", rand_hit, " урона", sep='')
                 input("\nENTER чтобы продолжить")
                 Enemy.hp -= rand_hit
 
             # Если защита и отдых
             elif slot_fight[z] == "Защита" and slot_fight_en[z] == "Отдых":
                 print(Person.name, "Бесполезно защитился")
-                slp(2)
-                input("\nENTER чтобы продолжить")
+                slp(3)
 
                 Enemy.stamina += round(Enemy.stamina_default, 3)
                 print("\n", Enemy.name, "решил восстановить выносливость")
-                slp(3)
+                input("\nENTER чтобы продолжить")
+
+            # Если атака и пить зелье (враг его пьёт)
+            elif slot_fight[z] == "Атака" and slot_fight_en[z] == "Пить зелье":
+                print(Back.WHITE,Fore.BLACK)
+                print("\nЗелье врага разбилось, но тот успел уклониться от удара")
+                slp(1.8)
+                print(" -",round(rand_hit/2, 3)," урона по врагу", sep='')
+                Enemy.hp -= round(rand_hit/2, 3)
+                input("\nENTER чтобы продолжить")
+
+            # Если защита и пить зелье (враг его пьёт)
+            elif slot_fight[z] == "Защита" and slot_fight_en[z] == "Пить зелье":
+                print(Back.WHITE, Fore.BLACK)
+                print(Person.name, "Бесполезно защитился")
+                slp(1)
+                if Enemy.rand_potion_en == "Зелье силы":
+                    Enemy.damage += round(Enemy.damage * 0.29, 3)
+                    print(Enemy.name," использовал Зелье силы (+",round(Enemy.damage * 0.29, 3)," к урону)")
+                    slp(2)
+                    input("\nENTER чтобы продолжить")
+                elif Enemy.rand_potion_en == "Зелье здоровья":
+                    Enemy.hp += round(Enemy.hp_default * 0.3, 3)
+                    print(Enemy.name, " использовал Зелье здоровья (+", round(Enemy.hp_default * 0.3, 3), " к здоровью)")
+                    slp(2)
+                    input("\nENTER чтобы продолжить")
+
+            # Если отдых и пить зелье
+            elif slot_fight[z] == "Отдых" and slot_fight_en[z] == "Пить зелье":
+                # Для персонажа игрока
+                Person.stamina += round(Person.stamina_default * 0.4)
+                print("\nВы удачно восстановили", round(Person.stamina_default * 0.4), "выносливости.")
+                slp(2.8)
+
+                # Для противника
+                if Enemy.rand_potion_en == "Зелье силы":
+                    Enemy.damage += round(Enemy.damage * 0.29, 3)
+                    print(Enemy.name," использовал Зелье силы (+",round(Enemy.damage * 0.29, 3)," к урону)")
+                    slp(2)
+                    input("\nENTER чтобы продолжить")
+                elif Enemy.rand_potion_en == "Зелье здоровья":
+                    Enemy.hp += round(Enemy.hp_default * 0.3, 3)
+                    print(Enemy.name, " использовал Зелье здоровья (+", round(Enemy.hp_default * 0.3, 3), " к здоровью)")
+                    slp(2)
+                    input("\nENTER чтобы продолжить")
+
+            # Если у обоих пить зелье
+            elif slot_fight[z] == "Пить зелье" and slot_fight_en[z] == "Пить зелье":
+                # Для персонажа игрока
+                if pot_in == "1":
+                    Person.Weapon.power += round(Person.Weapon.power_default * 0.3, 3)
+                    print(Back.GREEN, Fore.BLACK)
+                    print("\nИспользовано Зелье Силы! (+", round(Person.Weapon.power_default * 0.3, 3), " урона)",
+                          sep='')
+                    slp(3.3)
+                    pot = True
+
+                elif pot_in == "2":
+                    Person.hp += round(Person.hp_default * 0.3, 3)
+                    print(Back.GREEN, Fore.BLACK)
+                    print("\nИспользовано Зелье Здоровья! (+", round(Person.hp_default * 0.3, 3), " ХП)", sep='')
+                    slp(3.3)
+                    input("\nENTER чтобы продолжить")
+                    pot = True
+
+                elif pot_in == "3":
+                    Person.mana += round(Person.mana_default * 0.3, 3)
+                    print(Back.GREEN, Fore.BLACK)
+                    print("\nИспользовано Зелье Маны! (+", round(Person.mana_default * 0.3, 3), " маны)", sep='')
+                    slp(3.3)
+                    input("\nENTER чтобы продолжить")
+                    pot = True
+
+                    # Для противника
+                    if Enemy.rand_potion_en == "Зелье силы":
+                        Enemy.damage += round(Enemy.damage * 0.29, 3)
+                        print(Enemy.name, " использовал Зелье силы (+", round(Enemy.damage * 0.29, 3), " к урону)")
+                        slp(2)
+                        input("\nENTER чтобы продолжить")
+                    elif Enemy.rand_potion_en == "Зелье здоровья":
+                        Enemy.hp += round(Enemy.hp_default * 0.3, 3)
+                        print(Enemy.name, " использовал Зелье здоровья (+", round(Enemy.hp_default * 0.3, 3),
+                              " к здоровью)")
+                        slp(2)
+                        input("\nENTER чтобы продолжить")
+
 
 
 # Вход в дандж и само путешествие
@@ -1913,6 +2431,23 @@ def dunge():
 
     # Цикл, длина которого определяется длиной данджа
     for lm in range(d.Dunge.level_max):
+        die = False
+        if Person.hp < 0:
+            die = True
+            # Настройки по умолчанию
+            Person.hp = Person.hp_default
+            Person.Weapon.power = Person.Weapon.power_default
+            Person.Weapon.critical = Person.Weapon.critical_default
+            Person.stamina = Person.stamina_default
+            Person.mana = Person.mana_default
+
+            Person.day += 1
+
+            Enemy.hp = Enemy.hp_default
+            Enemy.stamina = Enemy.stamina_default
+            slp(2)
+            break
+
         enemy_choose(this_enemy)
         cls()
         print("\n\n")
@@ -1944,7 +2479,7 @@ def dunge():
             slot_fight = []
             slot_fight_en = []
             reset_ai()
-            fight(v1, v2, v3)
+            fight(v1, v2, v3, v4)
             d.Dunge.level += 1
 
         elif rand_event == 2:
@@ -1975,76 +2510,86 @@ def dunge():
     Enemy.hp = Enemy.hp_default
     Enemy.stamina = Enemy.stamina_default
 
-    slp(3)
-    print(Back.GREEN, Fore.BLACK)
-    print("\nВам удалось пройти дандж ", d.Dunge.name, "!", sep='')
-    slp(2.5)
-    # Начисление XP
-    Person.xp += round(d.Dunge.xp, 3)
-    print("**Вы получили", round(d.Dunge.xp, 3), "опыта**")
-    slp(3.5)
-    if Person.xp >= Person.multiplier:
-        Person.level += 1
+    if die == False:
+        slp(3)
+        print(Back.GREEN, Fore.BLACK)
+        print("\nВам удалось пройти дандж ", d.Dunge.name, "!", sep='')
+        slp(2.5)
+        # Начисление XP
+        Person.xp += round(d.Dunge.xp, 3)
+        print("**Вы получили", round(d.Dunge.xp, 3), "опыта**")
+        slp(3.5)
+        if Person.xp >= Person.multiplier:
+            Person.level += 1
 
-        if Person.level == 2:
-            print("\nРазблокировано достижение — 'Получите 2 уровень'!\n")
-            slp(2)
-            Person.ach_3 = "Выполнено!"
-            m_write_achievements()
-        if Person.level == 10:
-            print("\nРазблокировано достижение — 'Получите 10 уровень'!\n")
-            slp(2)
-            Person.ach_4 = "Выполнено!"
-            m_write_achievements()
+            if Person.level == 2:
+                print("\nРазблокировано достижение — 'Получите 2 уровень'!\n")
+                slp(2)
+                Person.ach_3 = "Выполнено!"
+                m_write_achievements()
+            if Person.level == 10:
+                print("\nРазблокировано достижение — 'Получите 10 уровень'!\n")
+                slp(2)
+                Person.ach_4 = "Выполнено!"
+                m_write_achievements()
 
-        if Person.level == 30:
-            print("\nРазблокировано достижение — 'Получите 30 уровень'!\n")
-            slp(2)
-            Person.ach_6 = "Выполнено!"
-            m_write_achievements()
+            if Person.level == 30:
+                print("\nРазблокировано достижение — 'Получите 30 уровень'!\n")
+                slp(2)
+                Person.ach_6 = "Выполнено!"
+                m_write_achievements()
 
-        if Person.level == 40:
-            print("\nРазблокировано достижение — 'Получите 40 уровень'!\n")
-            slp(2)
-            Person.ach_7 = "Выполнено!"
-            m_write_achievements()
+            if Person.level == 40:
+                print("\nРазблокировано достижение — 'Получите 40 уровень'!\n")
+                slp(2)
+                Person.ach_7 = "Выполнено!"
+                m_write_achievements()
 
-        if Person.level == 50:
-            print("\nРазблокировано достижение — 'Получите 50 уровень'!\n")
-            slp(2)
-            Person.ach_8 = "Выполнено!"
-            m_write_achievements()
+            if Person.level == 50:
+                print("\nРазблокировано достижение — 'Получите 50 уровень'!\n")
+                slp(2)
+                Person.ach_8 = "Выполнено!"
+                m_write_achievements()
 
-        if Person.level == 60:
-            print("\nРазблокировано достижение — 'Получите 60 уровень'!\n")
-            slp(2)
-            Person.ach_9 = "Выполнено!"
-            m_write_achievements()
+            if Person.level == 60:
+                print("\nРазблокировано достижение — 'Получите 60 уровень'!\n")
+                slp(2)
+                Person.ach_9 = "Выполнено!"
+                m_write_achievements()
 
-        Person.xp -= Person.multiplier
-        print("")
-        print(Person.name, " получил новый уровень! (", Person.level, ")", sep='')
-        Person.hp = 18 + (Person.level + 1)
-        Person.hp_default = 18 + (Person.level + 1)
-        Person.stamina = Person.hp / 3
-        Person.stamina_default = Person.hp / 3
-        Person.multiplier = Person.level * 12
-        Person.mana = 10 + Person.level
-        Person.mana_default = 10 + Person.level
+            Person.xp -= Person.multiplier
+            print("")
+            print(Person.name, " получил новый уровень! (", Person.level, ")", sep='')
+            Person.hp = 18 + (Person.level + 1)
+            Person.hp_default = 18 + (Person.level + 1)
+            Person.stamina = Person.hp / 3
+            Person.stamina_default = Person.hp / 3
+            Person.multiplier = Person.level * 12
+            Person.mana = 10 + Person.level
+            Person.mana_default = 10 + Person.level
 
-    if Person.xp >= Person.Weapon.multiplier:
-        Person.Weapon.level_w += 1
-        print("")
-        print("Оружие ", Person.name, " получило новый уровень! (", Person.Weapon.level_w, ")", sep='')
-        Person.Weapon.power = 5 + Person.Weapon.level_w
-        Person.Weapon.power_default = 5 + Person.Weapon.level_w
-        Person.Weapon.critical = Person.Weapon.power * 1.5
-        Person.Weapon.multiplier = Person.Weapon.level_w * 9
+        if Person.xp >= Person.Weapon.multiplier:
+            Person.Weapon.level_w += 1
+            print("")
+            print("Оружие ", Person.name, " получило новый уровень! (", Person.Weapon.level_w, ")", sep='')
+            Person.Weapon.power = 5 + Person.Weapon.level_w
+            Person.Weapon.power_default = 5 + Person.Weapon.level_w
+            Person.Weapon.critical = Person.Weapon.power * 1.5
+            Person.Weapon.multiplier = Person.Weapon.level_w * 9
 
-    m_write_save()
-    m_write_pack()
-    input("Нажмите ENTER для продолжения")
-    menu()
+        m_write_save()
+        m_write_pack()
+        input("Нажмите ENTER для продолжения")
+        menu()
+
+    else:
+        slp(1.5)
+        print(Back.RED, Fore.BLACK)
+        print("\nВам не удалось пройти даднж", d.Dunge.name)
+        slp(2)
+        m_write_pack()
+        m_write_save()
+        menu()
 
 
 # Выбор данджа
@@ -2075,7 +2620,6 @@ def go_dunge():
         slp(1.5)
         print('Что ж, теперь ты полноценный игрок в OFFLINE RPG!')
         input('\nНажми ENTER для выбора данджей')
-    # Недоделал
     cls()
     print(Back.GREEN, Fore.BLACK)
     print('=========OFFLINE RPG========')
