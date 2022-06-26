@@ -2556,22 +2556,22 @@ def dunge():
             slp(0.6)
         slp(1)
         # Встречи
-        rand_event = rdm.randint(0, 3)
-        if rand_event == 0 or rand_event == 1:
+        rand_event = rdm.randint(0, 5)
+        if rand_event == 0:
             slot_fight = []
             slot_fight_en = []
             reset_ai()
             fight(v1, v2, v3, v4)
             d.Dunge.level += 1
 
-        elif rand_event == 2:
+        elif rand_event == 2 or rand_event == 3 :
             slp(1.5)
             print(Back.GREEN, Fore.BLACK)
             print("\n", Person.name, "нашёл сундук! (+1 сундук в инвентарь)")
             Person.pack_chest += 1
             d.Dunge.level += 1
             slp(4)
-        elif rand_event == 3:
+        elif rand_event == 4 or rand_event == 5 or rand_event == 1:
             slp(1.5)
             print(Back.WHITE, Fore.BLACK)
             print("\n", Person.name, "ничего не отыскал...")
@@ -2669,6 +2669,67 @@ def dunge():
         print(Back.RED, Fore.BLACK)
         print("\nВам не удалось пройти даднж", d.Dunge.name)
         slp(2)
+        # Начисление XP
+        Person.xp += round(d.Dunge.xp / 2, 3)
+        print("**Вы получили", round(d.Dunge.xp / 2, 3), "опыта**")
+        slp(3.5)
+        if Person.xp >= Person.multiplier:
+            Person.level += 1
+
+            if Person.level == 2:
+                print("\nРазблокировано достижение — 'Получите 2 уровень'!\n")
+                slp(2)
+                Person.ach_3 = "Выполнено!"
+                m_write_achievements()
+            if Person.level == 10:
+                print("\nРазблокировано достижение — 'Получите 10 уровень'!\n")
+                slp(2)
+                Person.ach_4 = "Выполнено!"
+                m_write_achievements()
+
+            if Person.level == 30:
+                print("\nРазблокировано достижение — 'Получите 30 уровень'!\n")
+                slp(2)
+                Person.ach_6 = "Выполнено!"
+                m_write_achievements()
+
+            if Person.level == 40:
+                print("\nРазблокировано достижение — 'Получите 40 уровень'!\n")
+                slp(2)
+                Person.ach_7 = "Выполнено!"
+                m_write_achievements()
+
+            if Person.level == 50:
+                print("\nРазблокировано достижение — 'Получите 50 уровень'!\n")
+                slp(2)
+                Person.ach_8 = "Выполнено!"
+                m_write_achievements()
+
+            if Person.level == 60:
+                print("\nРазблокировано достижение — 'Получите 60 уровень'!\n")
+                slp(2)
+                Person.ach_9 = "Выполнено!"
+                m_write_achievements()
+
+            Person.xp -= Person.multiplier
+            print("")
+            print(Person.name, " получил новый уровень! (", Person.level, ")", sep='')
+            Person.hp = 18 + (Person.level + 1)
+            Person.hp_default = 18 + (Person.level + 1)
+            Person.stamina = Person.hp / 3
+            Person.stamina_default = Person.hp / 3
+            Person.multiplier = Person.level * 12
+            Person.mana = 10 + Person.level
+            Person.mana_default = 10 + Person.level
+
+        if Person.xp >= Person.Weapon.multiplier:
+            Person.Weapon.level_w += 1
+            print("")
+            print("Оружие ", Person.name, " получило новый уровень! (", Person.Weapon.level_w, ")", sep='')
+            Person.Weapon.power = 5 + Person.Weapon.level_w
+            Person.Weapon.power_default = 5 + Person.Weapon.level_w
+            Person.Weapon.critical = Person.Weapon.power * 1.5
+            Person.Weapon.multiplier = Person.Weapon.level_w * 9
         m_write_pack()
         m_write_save()
         menu()
