@@ -5,11 +5,7 @@
 
 ![0002](https://user-images.githubusercontent.com/86229920/175379428-7ca692c4-ddae-4c9a-ac4a-00dcc8d1964a.png)
 
-
-# КОГДА ВЫЙДЕТ?
-Игра ещё не сделана, но разработка идёт. Точной даты сказать не могу, но что работа идёт, можно и так видеть (По последним обновлениям ;) )
-
 ![olt7txIOKc](https://user-images.githubusercontent.com/86229920/174169079-58af967e-0bdd-4cfc-a119-eacde2b9d569.png)
 
 # Что запускать?
-Файл запуска — RPG.py
+Файл запуска — RPG.exe
