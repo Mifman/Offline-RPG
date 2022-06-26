@@ -1,4 +1,5 @@
 import random as rdm
+import random as rdm
 from time import sleep as slp
 from os import system  # для быстрой очистки экрана
 
@@ -1959,6 +1960,7 @@ def fight(v1, v2, v3, v4):
         elif Person.hp <= 0:
             slp(2)
             print("\n")
+            die = True
             print(Back.RED, Fore.BLACK)
             print(Person.name, "потерял сознание...")
             slp(4)
