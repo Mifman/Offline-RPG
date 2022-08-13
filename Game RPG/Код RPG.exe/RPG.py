@@ -666,7 +666,7 @@ def menu():
             print("Репозиторий игры (открытый код): https://github.com/Mifman/Offline-RPG")
             print("Руководства и обновления: https://github.com/Mifman/Offline-RPG/discussions")
             print("Разработчик: Mifman")
-            print("Версия игры: 1.0")
+            print("Версия игры: 1.1")
             print("Контакт: https://vk.com/mifman")
             faq = input("\n1. Про данджи\n"
                         "2. Про рынок\n"
@@ -1952,6 +1952,9 @@ def fight(v1, v2, v3, v4):
             print(Back.GREEN, Fore.BLACK)
             print(Enemy.name, "повержен!")
             slp(2.3)
+            print('Восстановлено 10% здоровья (+',round(Person.hp * 0.1, 3),")", sep='')
+            Person.hp += round(Person.hp * 0.1, 3)
+            slp(2.3)
             if Enemy.loot > 0:
                 get_loot(l_name, l_list, l_amount)
             break
@@ -2492,6 +2495,9 @@ def fight(v1, v2, v3, v4):
                               " к здоровью)")
                         slp(2)
                         input("\nENTER чтобы продолжить")
+            # Для ИИ (предполагаемые статы здоровья)
+            t_hp = Person.hp  # Противника
+            t_hp_self = Enemy.hp  # Свои
 
 
 
@@ -2735,6 +2741,55 @@ def dunge():
         menu()
 
 
+def boost_dunge():
+    # Выбор буста в начале
+    # Недоделал
+    while True:
+        slp(1)
+        if Person.potion_heal > 0 or Person.potion_pow > 0 or (Person.potion_mana > 0 and Person.special == 'Маг'):
+            print('\nВыбор буста:')
+            if Person.potion_heal > 0:
+                print("1. Зелье Здоровья:", Person.potion_heal)
+            if Person.potion_pow > 0:
+                print('2. Зелье Силы:', Person.potion_pow)
+            if Person.potion_mana > 0 and Person.special == 'Маг':
+                print('3. Зелье Маны:', Person.potion_mana)
+
+            print('n - Ничего')
+            boost = input('\nВаш выбор: ==>')
+            if boost == '1' and Person.potion_heal > 0:
+                print('Ваш выбор - Зелье Здоровья')
+                slp(2)
+                Person.potion_heal -= 1
+                Person.hp += round(Person.hp_default * 0.3, 3)
+
+                break
+            elif boost == '2' and Person.potion_pow > 0:
+                print('Ваш выбор - Зелье Силы')
+                slp(2)
+                Person.potion_pow -= 1
+                Person.Weapon.power += round(Person.Weapon.power_default * 0.3, 3)
+                break
+
+            elif boost == '3' and Person.potion_mana > 0 and Person.special == 'Маг':
+                print('Ваш выбор - Зелье Маны')
+                slp(2)
+                Person.potion_mana -= 1
+                Person.mana += round(Person.mana_default * 0.3, 3)
+                break
+
+            elif boost == 'n' or boost == 'N':
+                break
+
+            else:
+                print(Fore.BLACK, Back.RED, 'Выберите зелье из списка!')
+                slp(2)
+
+            cls()
+
+        else:
+            break
+
 # Выбор данджа
 def go_dunge():
     if start_new:
@@ -2797,14 +2852,15 @@ def go_dunge():
     if choose == "0":
         if Person.ach_1 == "Не выполнено":
             print("\nРазблокировано достижение — 'Сходите первый раз в дандж'!\n")
-            slp(2)
+            slp(3)
             Person.ach_1 = "Выполнено!"
             m_write_achievements()
-
         slp(0.5)
+
         print(Back.WHITE, Fore.BLACK)  # Белый фон, чёрный шрифт (фон битв)
         print("\nВаш выбор: Лес")
         Person.current_dunge = "Лес"
+        boost_dunge()
 
     elif choose == "1":
         if Person.level < 10:
@@ -2822,6 +2878,7 @@ def go_dunge():
             print(Back.WHITE, Fore.BLACK)  # Белый фон, чёрный шрифт (фон битв)
             print("\nВаш выбор: Подземелье")
             Person.current_dunge = "Подземелье"
+            boost_dunge()
 
     elif choose == "2" and Person.level > 9:
         if Person.level < 30:
@@ -2833,6 +2890,7 @@ def go_dunge():
             print(Back.WHITE, Fore.BLACK)  # Белый фон, чёрный шрифт (фон битв)
             print("\nВаш выбор: Густой лес")
             Person.current_dunge = "Густой лес"
+            boost_dunge()
 
     elif choose == "3" and Person.level > 29:
         if Person.level < 40:
@@ -2844,6 +2902,7 @@ def go_dunge():
             print(Back.WHITE, Fore.BLACK)  # Белый фон, чёрный шрифт (фон битв)
             print("\nВаш выбор: Заброшенный замок")
             Person.current_dunge = "Заброшенный замок"
+            boost_dunge()
 
     elif choose == "4" and Person.level > 39:
         if Person.level < 50:
@@ -2855,6 +2914,7 @@ def go_dunge():
             print(Back.WHITE, Fore.BLACK)  # Белый фон, чёрный шрифт (фон битв)
             print("\nВаш выбор: Супер-Подземелье")
             Person.current_dunge = "Супер-Подземелье"
+            boost_dunge()
 
     elif choose == "5" and Person.level > 49:
         if Person.level < 60:
@@ -2866,6 +2926,7 @@ def go_dunge():
             print(Back.WHITE, Fore.BLACK)  # Белый фон, чёрный шрифт (фон битв)
             print("\nВаш выбор: Изумрудный лес")
             Person.current_dunge = "Изумрудный лес"
+            boost_dunge()
 
     elif choose == "":
         menu()
