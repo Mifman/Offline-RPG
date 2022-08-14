@@ -2301,7 +2301,7 @@ def fight(v1, v2, v3, v4):
                         slp(0.9)
                         input("\nENTER чтобы продолжить")
                     else:
-                        Enemy.hp -= round(rand_hit_en * 0.05, 3)
+                        Person.hp -= round(rand_hit_en * 0.05, 3)
                         print(Back.GREEN, Fore.BLACK, "Врагу удалось пробить защиту и атаковать на",
                               round(rand_hit_en * 0.05, 3))
                         slp(0.9)
