@@ -2363,6 +2363,8 @@ def fight(v1, v2, v3, v4):
 
                 elif slot_fight_en[z] == "Отдых":
                     Enemy.stamina += round(Enemy.stamina_default, 3)
+                    if Enemy.stamina > Enemy.stamina_default:
+                        Enemy.stamina = Enemy.stamina_default
                     print("\n", Enemy.name, "решил восстановить выносливость")
                     slp(4)
 
@@ -2370,7 +2372,11 @@ def fight(v1, v2, v3, v4):
             elif slot_fight[z] == "Отдых" and (slot_fight_en[z] == "Защита" or slot_fight_en[z] == "Отдых"):
                 # Для персонажа игрока
                 Person.stamina += round(Person.stamina_default * 0.4)
-                print("\nВы удачно восстановили", round(Person.stamina_default * 0.4), "выносливости.")
+                if Person.stamina > Person.stamina_default:
+                    print("\nВы удачно восстановили", Person.stamina - Person.stamina_default, "выносливости.")
+                    Person.stamina = Person.stamina_default
+                else:
+                    print("\nВы удачно восстановили", round(Person.stamina_default * 0.4), "выносливости.")
                 slp(2.8)
 
                 # Для врага
@@ -2380,14 +2386,24 @@ def fight(v1, v2, v3, v4):
 
                 elif slot_fight_en[z] == "Отдых":
                     Enemy.stamina += round(Enemy.stamina_default, 3)
+                    if Enemy.stamina > Enemy.stamina_default:
+                        Enemy.stamina = Enemy.stamina_default
                     print("\n", Enemy.name, "решил восстановить выносливость")
                     input("\nENTER чтобы продолжить")
 
             # Если отдых и атака
             elif slot_fight[z] == "Отдых" and slot_fight_en[z] == "Атака":
                 Person.stamina += round(Person.stamina_default * 0.2, 3)
-                print("\nВы восстановили", round(Person.stamina_default * 0.2, 3), "выносливости,\n"
-                                                                                   "Но", Enemy.name, "атаковал вас!")
+                if Person.stamina > Person.stamina_default:
+                    print("\nВы восстановили", Person.stamina - Person.stamina_default, "выносливости,\n"
+                                                                                       "Но", Enemy.name,
+                          "атаковал вас!")
+                    Person.stamina = Person.stamina_default
+                else:
+                    print("\nВы восстановили", round(Person.stamina_default * 0.2, 3), "выносливости,\n"
+                                                                                       "Но", Enemy.name,
+                          "атаковал вас!")
+
                 slp(3)
                 print("-", rand_hit_en, sep='')
                 input("\nENTER чтобы продолжить")
@@ -2396,6 +2412,8 @@ def fight(v1, v2, v3, v4):
             # Если атака и отдых
             elif slot_fight[z] == "Атака" and slot_fight_en[z] == "Отдых":
                 Enemy.stamina += round(Enemy.stamina_default * 0.2, 3)
+                if Enemy.stamina > Enemy.stamina_default:
+                    Enemy.stamina = Enemy.stamina_default
                 print("\nВраг восстановил выносливость,\n"
                       "Но", Person.name, "атаковал!")
                 slp(3)
@@ -2409,6 +2427,8 @@ def fight(v1, v2, v3, v4):
                 slp(3)
 
                 Enemy.stamina += round(Enemy.stamina_default, 3)
+                if Enemy.stamina > Enemy.stamina_default:
+                    Enemy.stamina = Enemy.stamina_default
                 print("\n", Enemy.name, "решил восстановить выносливость")
                 input("\nENTER чтобы продолжить")
 
@@ -2441,7 +2461,11 @@ def fight(v1, v2, v3, v4):
             elif slot_fight[z] == "Отдых" and slot_fight_en[z] == "Пить зелье":
                 # Для персонажа игрока
                 Person.stamina += round(Person.stamina_default * 0.4)
-                print("\nВы удачно восстановили", round(Person.stamina_default * 0.4), "выносливости.")
+                if Person.stamina > Person.stamina_default:
+                    print("\nВы удачно восстановили", Person.stamina - Person.stamina_default, "выносливости.")
+                    Person.stamina = Person.stamina_default
+                else:
+                    print("\nВы удачно восстановили", round(Person.stamina_default * 0.4), "выносливости.")
                 slp(2.8)
 
                 # Для противника
