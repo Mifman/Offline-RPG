@@ -2581,7 +2581,7 @@ def dunge():
         slp(4)
         print(Back.WHITE, Fore.BLACK)
         print("\nАнализ:", end='')
-        for i in range(10):
+        for i in range(rdm.randint(4,10)):
             print("#", end='')
             slp(0.6)
         slp(1)
@@ -2813,6 +2813,43 @@ def boost_dunge():
 
         else:
             break
+
+    # Второй цикл для поиска игрока-бота (уровень игрока должен быть минимум 5!)
+    while True:
+        if Person.level > 4:
+            print(Fore.BLACK, Back.WHITE)
+            slp(1.3)
+            helper = input('\nХотите поискать помощника? 0 - нет/1 - да\n   ==>')
+            if helper == '0':
+                break
+            elif helper == '1':
+                cls()
+                rand_help = rdm.randint(1,4)
+                search = int(rdm.randint(50,150) / 100 * 10)
+                help_search = 0
+                print(Fore.BLACK, Back.WHITE)
+                while help_search < 100:
+                    print(Fore.BLACK, Back.WHITE)
+                    print('\n\nПоиск... | {0}% |'.format(help_search))
+                    help_search += search
+                    slp(0.5)
+                    cls()
+                if rand_help == 1:
+                    print('\nПомощник найден!')
+                    rand_help_h = Person.hp_default / 4 + rdm.randint(1,4)
+                    rand_help_p = Person.Weapon.power_default / 4 + rdm.randint(1,2)
+                    slp(1)
+                    print(Back.GREEN, Fore.BLACK,'\nHP + {0}\nСила Оружия + {1}'.format(rand_help_h,rand_help_p))
+                    Person.hp += rand_help_h
+                    Person.Weapon.power += rand_help_p
+                    slp(1)
+                    input('\nENTER для входа в дандж')
+                    break
+
+                else:
+                    print('\nНе удалось найти помощника.')
+                    slp(3)
+                    break
 
 # Выбор данджа
 def go_dunge():
