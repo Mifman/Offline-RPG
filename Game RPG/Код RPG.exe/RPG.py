@@ -1380,7 +1380,9 @@ name_list = ["Progger", "dAlEk456", "Footman", "KoLo40k", "Киргиз", "Св�
              "Chilly", "FRENK", "Фант0м", "GONZO", "ШапоКJLЯC", "Succubus", "СКАЛА",
              "dazz", "ВАШ Доктор", "Тень", "MC", "ZOrg", "Агент007", "Лб_Чипс", "Сухарик",
              "КR0ш", "ArTemK", "Vlad1337", "Kefir", "Лёха", "Сергей", "Рэйзор БезУмНыЙ",
-             "КрипоНуб", "Who Touch My Spagetti?"]
+             "КрипоНуб", "Who Touch My Spagetti?", "Blade Master", "Shadow Assassin",
+             "Sir Swashalot", "Captain Waffle", "Space Cowboy", "The Bubblegum Baron",
+             "Coconut Crusader"]
 
 
 def player():
@@ -2581,9 +2583,11 @@ def dunge():
         slp(4)
         print(Back.WHITE, Fore.BLACK)
         print("\nАнализ:", end='')
-        for i in range(rdm.randint(4,10)):
-            print("#", end='')
+
+        for i in range(1, rdm.randint(4,10)):
+            print('#', end='', flush=True)
             slp(0.6)
+
         slp(1)
         # Встречи
         rand_event = rdm.randint(0, 5)
@@ -2815,12 +2819,14 @@ def boost_dunge():
             break
 
     # Второй цикл для поиска игрока-бота (уровень игрока должен быть минимум 5!)
-    while True:
+    f = True
+    while f == True:
         if Person.level > 4:
             print(Fore.BLACK, Back.WHITE)
-            slp(1.3)
+            slp(1)
             helper = input('\nХотите поискать помощника? 0 - нет/1 - да\n   ==>')
             if helper == '0':
+                f = False
                 break
             elif helper == '1':
                 cls()
@@ -2835,20 +2841,43 @@ def boost_dunge():
                     slp(0.5)
                     cls()
                 if rand_help == 1:
+                    print(Fore.BLACK, Back.WHITE)
                     print('\nПомощник найден!')
-                    rand_help_h = Person.hp_default / 4 + rdm.randint(1,4)
-                    rand_help_p = Person.Weapon.power_default / 4 + rdm.randint(1,2)
                     slp(1)
-                    print(Back.GREEN, Fore.BLACK,'\nHP + {0}\nСила Оружия + {1}'.format(rand_help_h,rand_help_p))
-                    Person.hp += rand_help_h
-                    Person.Weapon.power += rand_help_p
-                    slp(1)
-                    input('\nENTER для входа в дандж')
-                    break
+                    pay_help = rdm.randint(1,5)
+                    while True:
+                        print('Помощник', rdm.choice(name_list), 'требует', pay_help, 'монет.','\n\nОплатить? 0 - нет/1 - да')
+                        pay_help_choice = input('\n  ==>')
+                        if pay_help_choice == '0':
+                            f = False
+                            break
+                        elif pay_help_choice == '1':
+                            if pay_help <= Person.coins:
+                                print(Fore.BLACK,Back.GREEN,'\nОплата произведена!')
+                                Person.coins -= pay_help
+                                slp(2.5)
+
+                                # Прибавка к статам
+                                rand_help_h = Person.hp_default / 4 + rdm.randint(1,4)
+                                rand_help_p = Person.Weapon.power_default / 4 + rdm.randint(1,2)
+                                slp(1)
+                                print(Back.GREEN, Fore.BLACK,'\nHP + {0}\nСила Оружия + {1}'.format(rand_help_h,rand_help_p))
+                                Person.hp += rand_help_h
+                                Person.Weapon.power += rand_help_p
+                                slp(1)
+                                input('\nENTER для входа в дандж')
+                                f = False
+                                break
+                            else:
+                                print(Fore.WHITE,Back.RED,'\nНедостаточно монет!')
+                                slp(3)
+                                f = False
+                                break
 
                 else:
                     print('\nНе удалось найти помощника.')
                     slp(3)
+                    f = False
                     break
 
 # Выбор данджа
