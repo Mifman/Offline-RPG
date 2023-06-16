@@ -2844,7 +2844,12 @@ def boost_dunge():
                     print(Fore.BLACK, Back.WHITE)
                     print('\nПомощник найден!')
                     slp(1)
-                    pay_help = rdm.randint(1,5)
+
+                    if Person.coins < 20:
+                        pay_help = rdm.randint(1, 5)
+                    else:
+                        pay_help = rdm.randint(3, 10)
+
                     while True:
                         print('Помощник', rdm.choice(name_list), 'требует', pay_help, 'монет.','\n\nОплатить? 0 - нет/1 - да')
                         pay_help_choice = input('\n  ==>')
