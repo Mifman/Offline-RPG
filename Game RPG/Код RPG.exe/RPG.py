@@ -728,7 +728,7 @@ def menu():
 
     else:
         print(Back.RED, Fore.BLACK)
-        print("\nВведите коректные данные!")
+        print("\nВведите корректные данные!")
         slp(2.3)
         menu()
 
