@@ -2957,6 +2957,13 @@ def boost_dunge():
 
 # Выбор данджа
 def go_dunge():
+
+    #####
+    # Фикс бага с "дефолтным" критом
+    Person.Weapon.critical = Person.Weapon.power * 1.5
+    Person.Weapon.critical_default = Person.Weapon.power * 1.5
+    #####
+
     if start_new:
         cls()
         Person.a_0 += 1
