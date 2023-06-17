@@ -2596,6 +2596,19 @@ def dunge():
 
     # Цикл, длина которого определяется длиной данджа
     for lm in range(d.Dunge.level_max):
+
+        ######
+        # Проверка на переполнение инвентаря
+        if Person.potion_pow > 9:
+            Person.potion_pow = 9
+        elif Person.potion_heal > 9:
+            Person.potion_heal = 9
+        elif Person.potion_mana > 9:
+            Person.potion_mana = 9
+        elif Person.pack_chest > 9:
+            Person.pack_chest = 9
+        ######
+
         die = False
         if Person.hp < 0:
             die = True
