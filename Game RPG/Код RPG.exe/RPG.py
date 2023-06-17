@@ -1172,11 +1172,11 @@ def ork():
 # Паук (2-6)
 def spider():
     Enemy.name = "Паук"
-    Enemy.level = d.Dunge.difficulty + rdm.randint(0, 3)
+    Enemy.level = d.Dunge.difficulty + rdm.randint(1, 5)
     Enemy.stamina = Enemy.stamina_default
     Enemy.hp = Enemy.hp_default
 
-    Enemy.hp = 4 + Enemy.level + rdm.randint(0, 2)
+    Enemy.hp = 4 + Enemy.level + rdm.randint(1, 3)
     Enemy.loot = 0
     Enemy.is_player = False
 
@@ -1265,10 +1265,10 @@ def troll():
 # Циклоп (3-6)
 def cyklop():
     Enemy.name = "Циклоп"
-    Enemy.level = d.Dunge.difficulty + rdm.randint(0, 5)
+    Enemy.level = d.Dunge.difficulty + rdm.randint(1, 5)
 
-    Enemy.hp = 4 + Enemy.level + rdm.randint(0, 5)
-    Enemy.damage = 1 + Enemy.level + rdm.randint(0, 2)
+    Enemy.hp = 4 + Enemy.level + rdm.randint(1, 5)
+    Enemy.damage = 1 + Enemy.level + rdm.randint(2, 4)
     Enemy.loot = rdm.randint(0, 2)
     Enemy.is_player = False
 
@@ -1327,7 +1327,7 @@ def gorgona():
 # Скелет (2,4,5)
 def skelet():
     Enemy.name = "Скелет"
-    Enemy.level = d.Dunge.difficulty + rdm.randint(0, 3)
+    Enemy.level = d.Dunge.difficulty + rdm.randint(0, 4)
     Enemy.loot = rdm.randint(0, 1)
     Enemy.is_player = False
 
@@ -1376,7 +1376,7 @@ def zombi():
     Enemy.level = d.Dunge.difficulty + rdm.randint(0, 3)
     Enemy.is_player = False
 
-    Enemy.hp = 4 + Enemy.level + rdm.randint(0, 3)
+    Enemy.hp = 4 + Enemy.level + rdm.randint(1, 5)
     Enemy.loot = rdm.randint(0, 1)
 
     Enemy.hp_default = Enemy.hp
@@ -2285,7 +2285,6 @@ def fight(v1, v2, v3, v4):
                         print("\nВы атаковали на", round(rand_hit * 0.1, 3), "урона")
 
                     Person.hp -= round(rand_hit_en * 0.2, 3)
-                    print("\nВы атаковали на", round(rand_hit * 0.2, 3),' + ', round(rand_hit * 0.1, 3), "урона")
                     slp(0.7)
                     print("По вам прошло", round(rand_hit_en * 0.2, 3), "урона")
                     slp(1)
