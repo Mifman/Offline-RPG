@@ -432,7 +432,7 @@ def menu():
                     t = "."
                     print("\nОткрывается сундук", t * i, sep='')
                     slp(0.5)
-
+                all_pot = ''
                 if rand_open_chest <= 3:
                     print(Back.WHITE, Fore.BLACK)
                     print("\nВ сундуке пусто...")
@@ -449,19 +449,31 @@ def menu():
                     rand_potion = rdm.randint(0, 2)
                     if rand_potion == 0:
                         rand_potion = "Силы"
-                        Person.potion_pow += 1
+                        if Person.potion_pow < 9:
+                            Person.potion_pow += 1
+                        else:
+                            all_pot = '(Переполнен инвентарь)'
                     elif rand_potion == 1:
                         rand_potion = "Здоровья"
-                        Person.potion_heal += 1
+                        if Person.potion_heal < 9:
+                            Person.potion_heal += 1
+                        else:
+                            all_pot = '(Переполнен инвентарь)'
                     elif rand_potion == 2:
                         if Person.special != "Маг":
                             rand_potion = "Здоровья"
-                            Person.potion_heal += 1
+                            if Person.potion_heal < 9:
+                                Person.potion_heal += 1
+                            else:
+                                all_pot = '(Переполнен инвентарь)'
                         else:
                             rand_potion = "Маны"
-                            Person.potion_mana += 1
+                            if Person.potion_mana < 9:
+                                Person.potion_mana += 1
+                            else:
+                                all_pot = '(Переполнен инвентарь)'
 
-                    print("\nВ сундуке найдено зелье", rand_potion)
+                    print("\nВ сундуке найдено зелье", rand_potion, all_pot)
                     slp(4)
 
                 Person.Stats.chests_open += 1
@@ -666,7 +678,7 @@ def menu():
             print("Репозиторий игры (открытый код): https://github.com/Mifman/Offline-RPG")
             print("Руководства и обновления: https://github.com/Mifman/Offline-RPG/discussions")
             print("Разработчик: Mifman")
-            print("Версия игры: 1.1")
+            print("Версия игры: 1.3")
             print("Контакт: https://vk.com/mifman")
             faq = input("\n1. Про данджи\n"
                         "2. Про рынок\n"
@@ -1474,14 +1486,27 @@ def get_loot(l_name, l_list, l_amount):
             Person.Stats.coins_up += l_amount
 
         elif l_name == l_list[1]:  # pow
-            Person.potion_pow += l_amount
+            if Person.potion_pow < 9:
+                Person.potion_pow += l_amount
+
+            else:
+                print('\nИнвентарь зелий силы полон!')
 
         elif l_name == l_list[2]:  # heal
-            Person.potion_heal += l_amount
+            if Person.potion_heal < 9:
+                Person.potion_heal += l_amount
+
+            else:
+                print('\nИнвентарь зелий здоровья полон!')
 
         elif l_name == l_list[3]:  # mana
             if Person.special == "Маг":
-                Person.potion_mana += l_amount
+                if Person.potion_mana < 9:
+                    Person.potion_mana += l_amount
+
+                else:
+                    print('\nИнвентарь зелий маны полон!')
+
             else:
                 print(Person.special, 'не может брать зелье маны!')
 
@@ -1954,8 +1979,9 @@ def fight(v1, v2, v3, v4):
             print(Back.GREEN, Fore.BLACK)
             print(Enemy.name, "повержен!")
             slp(2.3)
-            print('Восстановлено 10% здоровья (+',round(Person.hp * 0.1, 3),")", sep='')
-            Person.hp += round(Person.hp * 0.1, 3)
+            if (round(Person.hp * 0.1, 3)) <= (Person.hp_default - Person.hp):
+                print('Восстановлено 10% здоровья (+',round(Person.hp * 0.1, 3),")", sep='')
+                Person.hp += round(Person.hp * 0.1, 3)
             slp(2.3)
             if Enemy.loot > 0:
                 get_loot(l_name, l_list, l_amount)
@@ -2223,11 +2249,21 @@ def fight(v1, v2, v3, v4):
             # Если Атака и Атака
             if slot_fight[z] == "Атака" and slot_fight_en[z] == "Атака":
                 if Person.level > Enemy.level:
-                    Enemy.hp -= round(rand_hit * 0.2, 3)
-                    Person.hp -= round(rand_hit_en * 0.1, 3)
-                    print("\nВы атаковали на", round(rand_hit * 0.2, 3), "урона")
+                    if Person.special == 'Мечник':
+                        Enemy.hp -= (round(rand_hit * 0.2, 3) + round(rand_hit * 0.1, 3))
+                        print("\nВы атаковали на", round(rand_hit * 0.2, 3), ' + ', round(rand_hit * 0.1, 3), "урона")
+
+                    else:
+                        Enemy.hp -= round(rand_hit * 0.1, 3)
+                        print("\nВы атаковали на", round(rand_hit * 0.1, 3), "урона")
                     slp(0.7)
-                    print("По вам прошло", round(rand_hit_en * 0.1, 3), "урона")
+                    if Person.special == 'Лучник':
+                        print("По вам прошло 0 урона")
+
+                    else:
+                        Person.hp -= round(rand_hit_en * 0.1, 3)
+                        print("По вам прошло", round(rand_hit_en * 0.1, 3), "урона")
+
                     slp(1)
                     input("\nENTER чтобы продолжить")
 
@@ -2241,9 +2277,15 @@ def fight(v1, v2, v3, v4):
                     input("\nENTER чтобы продолжить")
 
                 else:
-                    Enemy.hp -= round(rand_hit * 0.2, 3)
+                    if Person.special == 'Мечник':
+                        Enemy.hp -= (round(rand_hit * 0.2, 3) + round(rand_hit * 0.1, 3))
+                        print("\nВы атаковали на", round(rand_hit * 0.2, 3), ' + ', round(rand_hit * 0.1, 3), "урона")
+                    else:
+                        Enemy.hp -= round(rand_hit * 0.1, 3)
+                        print("\nВы атаковали на", round(rand_hit * 0.1, 3), "урона")
+
                     Person.hp -= round(rand_hit_en * 0.2, 3)
-                    print("\nВы атаковали на", round(rand_hit * 0.2, 3), "урона")
+                    print("\nВы атаковали на", round(rand_hit * 0.2, 3),' + ', round(rand_hit * 0.1, 3), "урона")
                     slp(0.7)
                     print("По вам прошло", round(rand_hit_en * 0.2, 3), "урона")
                     slp(1)
@@ -2289,8 +2331,13 @@ def fight(v1, v2, v3, v4):
                 rand_damage_back = rdm.randint(0, 1)
                 # Возврат урона
                 if rand_damage_back == 0:
-                    Enemy.hp -= round(rand_hit_en * 0.05, 3)
-                    print(Back.RED, Fore.BLACK, "\nВраг получил урон (-", round(rand_hit_en * 0.05, 3), ")", sep='')
+                    if Person.special == 'Броневик':
+                        Enemy.hp -= round(rand_hit_en * 0.14, 3)
+                        print(Back.RED, Fore.BLACK, "\nВраг получил урон от щита (-", round(rand_hit_en * 0.14, 3), ")", sep='')
+
+                    else:
+                        Enemy.hp -= round(rand_hit_en * 0.05, 3)
+                        print(Back.RED, Fore.BLACK, "\nВраг получил урон (-", round(rand_hit_en * 0.05, 3), ")", sep='')
                     slp(0.7)
                     input("\nENTER чтобы продолжить")
 
@@ -2316,7 +2363,11 @@ def fight(v1, v2, v3, v4):
 
             # Если защита и защита
             if slot_fight[z] == "Защита" and slot_fight_en[z] == "Защита":
-                print("\nВы оба решили защититься")
+                print("\nВы оба решили защититься\n")
+                if Person.special == 'Броневик':
+                    Enemy.hp -= round(rand_hit * 0.1, 3)
+                    print(Person.name,"атаковал щитом на", round(rand_hit * 0.1, 3))
+
                 slp(1)
                 input("\nENTER чтобы продолжить")
 
@@ -2602,7 +2653,13 @@ def dunge():
             slp(1.5)
             print(Back.GREEN, Fore.BLACK)
             print("\n", Person.name, "нашёл сундук! (+1 сундук в инвентарь)")
-            Person.pack_chest += 1
+
+            if Person.pack_chest < 9:
+                Person.pack_chest += 1
+
+            else:
+                print('\nИнвентарь сундуков полон!')
+
             d.Dunge.level += 1
             slp(4)
         elif rand_event == 4 or rand_event == 5 or rand_event == 1:
