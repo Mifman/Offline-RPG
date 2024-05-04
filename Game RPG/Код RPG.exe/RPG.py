@@ -2859,8 +2859,8 @@ def boost_dunge():
                 slp(2)
                 Person.potion_heal -= 1
                 Person.hp += round(Person.hp_default * 0.3, 3)
-
                 break
+
             elif boost == '2' and Person.potion_pow > 0:
                 print('Ваш выбор - Зелье Силы')
                 slp(2)
@@ -2886,6 +2886,7 @@ def boost_dunge():
 
         else:
             break
+    countdown_d()
 
     # Второй цикл для поиска игрока-бота (уровень игрока должен быть минимум 5!)
     f = True
@@ -2955,6 +2956,20 @@ def boost_dunge():
                     break
 
 # Выбор данджа
+def countdown_d():
+    slp(2)
+    сount_down = 5
+    for i in range(5):
+        cls()
+        print(Back.WHITE, Fore.BLACK)
+        print("Вход через ", end='')
+        print(сount_down)
+        slp(1)
+        сount_down -= 1
+        cls()
+
+    dunge()  # Вызов игры
+
 def go_dunge():
 
     #####
@@ -3107,19 +3122,6 @@ def go_dunge():
         slp(3)
         cls()
         go_dunge()
-
-    slp(2)
-    сountdown = 5
-    for i in range(5):
-        cls()
-        print(Back.WHITE, Fore.BLACK)
-        print("Вход через ", end='')
-        print(сountdown)
-        slp(1)
-        сountdown -= 1
-        cls()
-
-    dunge()  # Вызов игры
 
 
 # Загрузка сохранения
